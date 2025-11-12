@@ -28,6 +28,14 @@ app.post('/signup',(req,res)=>{
     })
 })
 
-
+app.post('/login',(req,res)=>{
+    const{email,password}=req.body
+    const sql="SELECT * FROM users WHERE email=? AND password=?"
+    db.query(sql,[email,password],(err,result)=>{
+        if(err)return res.send("Error")
+        if(result.length==0)return res.send("Invalid email or password")
+        res.redirect('index.html')
+    })
+})
 
 app.listen(3000,()=>console.log("Server running at http://localhost:3000"))
