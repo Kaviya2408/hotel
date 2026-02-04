@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
 
-const app = {
-  use: () => {},
-  get: () => {},
-  post: () => {},
-  delete: () => {}
-};
-
 // Order schema for MongoDB
 const orderSchema = new mongoose.Schema({
     customer_name: { type: String, required: true },
@@ -167,6 +160,3 @@ export default async function handler(req, res) {
         res.status(500).json({ error: 'Database error: ' + err.message });
     }
 }
-
-// For Vercel serverless functions
-export { handler as default };

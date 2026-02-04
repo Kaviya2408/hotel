@@ -1,8 +1,7 @@
 {
   "name": "restaurant",
   "version": "1.0.0",
-  "type": "module",
-  "scripts": {
+    "scripts": {
     "dev": "node api/index.js",
     "build": "echo 'Build complete'"
   },
