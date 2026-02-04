@@ -152,25 +152,42 @@ function startServer() {
         }
     });
 
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`🚀 Server running on http://localhost:${PORT}`);
-        console.log(`🌐 Restaurant: http://localhost:${PORT}/`);
-        console.log(`📊 Admin Panel: http://localhost:${PORT}/admin.html`);
-        console.log(`🧪 Test API: http://localhost:${PORT}/api/test`);
-    });
 }
 
 // Connect to MongoDB and start server
 const uri = `mongodb+srv://${process.env.DB_USER || dbConfig.user}:${encodeURIComponent(process.env.DB_PASSWORD || dbConfig.password)}@${process.env.DB_HOST || dbConfig.host}/${process.env.DB_NAME || dbConfig.dbName}?retryWrites=true&w=majority`;
-console.log('🔗 Connecting to MongoDB with URI:', uri);
 
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('✅ MongoDB Atlas connected');
-    startServer();
-}).catch(err => {
-    console.error('❌ MongoDB connection failed:', err);
-});
+// For Vercel serverless, we need to handle the connection differently
+let isConnected = false;
+
+async function connectToDatabase() {
+    if (isConnected) return;
+    
+    try {
+        await mongoose.connect(uri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        isConnected = true;
+        console.log('✅ MongoDB Atlas connected');
+    } catch (err) {
+        console.error('❌ MongoDB connection failed:', err);
+        throw err;
+    }
+}
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+    connectToDatabase().then(() => {
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`🚀 Server running on http://localhost:${PORT}`);
+            console.log(`🌐 Restaurant: http://localhost:${PORT}/`);
+            console.log(`📊 Admin Panel: http://localhost:${PORT}/admin.html`);
+            console.log(`🧪 Test API: http://localhost:${PORT}/api/test`);
+        });
+    });
+}
+
+// For Vercel serverless
+module.exports = app;
