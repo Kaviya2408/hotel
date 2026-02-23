@@ -1,10 +1,10 @@
 // Database configuration for MongoDB Atlas
 const config = {
     // MongoDB Atlas connection details
-    host: process.env.DB_HOST || 'cluster0.ummyuou.mongodb.net',
-    user: process.env.DB_USER || 'admin',
-    password: process.env.DB_PASSWORD || 'Kaviyashree@24',
-    dbName: process.env.DB_NAME || 'hotelusers'
+    host: process.env.DB_HOST || 'tastyfoods.94v2zd3.mongodb.net',
+    user: process.env.DB_USER || 'admin_db_user',
+    password: process.env.DB_PASSWORD || 'Kaviyashree',
+    dbName: process.env.DB_NAME || 'tastyfoods'
 };
 
 // Get configuration based on environment
@@ -21,5 +21,8 @@ function getMongoURI() {
 module.exports = {
     getConfig,
     getMongoURI,
-    ...config
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    dbName: config.dbName
 };
