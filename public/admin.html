@@ -165,150 +165,95 @@
         <p>Orders Management System</p>
     </div>
 
-    <div class="orders-container" id="orders-container">
-        <div class="no-orders">
-            <h3>Loading orders...</h3>
-            <p>Please wait while we fetch the latest orders.</p>
-        </div>
-    </div>
+    <table class="orders-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="orders-table-body">
+            <tr>
+                <td colspan="7">Loading orders...</td>
+            </tr>
+        </tbody>
+    </table>
 
     <script>
-        const backendUrl = window.location.origin;
+        const backendUrl = 'https://restaurant-backend-0vmh.onrender.com'; // replace with your backend URL
 
-        // Auto-refresh every 30 seconds
-        setInterval(loadOrders, 30000);
+        async function fetchOrders() {
+            try {
+                const response = await fetch(`${backendUrl}/api/orders`);
+                const orders = await response.json();
 
-        // Initial load
-        loadOrders();
+                const tbody = document.getElementById('orders-table-body');
+                tbody.innerHTML = '';
 
-        function loadOrders() {
-            const container = document.getElementById('orders-container');
-            container.innerHTML = `
-                <div class="no-orders">
-                    <h3>Loading orders...</h3>
-                    <p>Please wait while we fetch the latest orders.</p>
-                </div>
-            `;
-
-            fetch(`${backendUrl}/api/orders`)
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    return response.json();
-                })
-                .then(orders => {
-                    if (!orders || orders.length === 0) {
-                        container.innerHTML = `
-                            <div class="no-orders">
-                                <h3>No orders received yet</h3>
-                                <p>Orders will appear here when customers place them.</p>
-                                <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
-                            </div>
-                        `;
-                        return;
-                    }
-
-                    let html = '';
-                    orders.forEach((order, index) => {
-                        const orderDate = new Date(order.created_at || order.timestamp);
-                        const orderId = orders.length - index;
-                        const mongoOrderId = order._id;
-
-                        let itemsHtml = '';
-                        try {
-                            const items = typeof order.order_items === "string" ? JSON.parse(order.order_items) : order.order_items;
-                            if (Array.isArray(items)) {
-                                items.forEach(item => {
-                                    itemsHtml += `
-                                        <div class="item">
-                                            <div class="item-name">${item.name} x ${item.quantity}</div>
-                                            <div class="item-price">₹${item.price * item.quantity}</div>
-                                        </div>
-                                    `;
-                                });
-                            } else {
-                                itemsHtml = `<div class="item"><div class="item-name">Invalid items data</div></div>`;
-                            }
-                        } catch (e) {
-                            itemsHtml = `<div class="item"><div class="item-name">Error loading items</div></div>`;
-                        }
-
-                        html += `
-                            <div class="order-card">
-                                <div class="order-header">
-                                    <div class="order-id">Order #${orderId}</div>
-                                    <div class="order-time">${orderDate.toLocaleString()}</div>
-                                </div>
-
-                                <div class="customer-info">
-                                    <h3>👤 Customer Information</h3>
-                                    <p><strong>Name:</strong> ${order.customer_name || 'N/A'}</p>
-                                    <p><strong>Phone:</strong> ${order.customer_phone || 'N/A'}</p>
-                                    <p><strong>Address:</strong> ${order.customer_address || 'N/A'}</p>
-                                </div>
-
-                                <div class="order-items">
-                                    <h4>🛒 Order Items</h4>
-                                    ${itemsHtml}
-                                </div>
-
-                                <div class="order-total">
-                                    Total: ₹${order.total || '0'}
-                                </div>
-
-                                <div class="delivered-checkbox">
-                                    <label>
-                                        <input type="checkbox" onchange="markAsDelivered(this, '${mongoOrderId}', '${orderId}')">
-                                        <span>✅ Mark as Delivered & Delete</span>
-                                    </label>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    container.innerHTML = html + `
-                        <div style="text-align: center; margin-top: 20px;">
-                            <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
-                        </div>
+                orders.forEach(order => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${order.name || order.customer_name || 'N/A'}</td>
+                        <td>${order.email || 'N/A'}</td>
+                        <td>${order.phone || order.customer_phone || 'N/A'}</td>
+                        <td>${order.address || order.customer_address || 'N/A'}</td>
+                        <td>${order.items ? order.items.map(i => i.name).join(', ') : 'N/A'}</td>
+                        <td>${order.total || 'N/A'}</td>
+                        <td>${order.status || 'pending'}</td>
                     `;
-                })
-                .catch(error => {
-                    container.innerHTML = `
-                        <div class="no-orders">
-                            <h3>Error loading orders</h3>
-                            <p>${error.message}</p>
-                            <button class="refresh-btn" onclick="loadOrders()">🔄 Refresh Orders</button>
-                        </div>
-                    `;
+                    tbody.appendChild(row);
                 });
-        }
-
-        function markAsDelivered(checkboxEl, mongoOrderId, displayOrderId) {
-            if (!confirm('Are you sure this order has been delivered? It will be permanently deleted.')) {
-                if (checkboxEl) checkboxEl.checked = false;
-                return;
+            } catch (err) {
+                console.error('❌ Error fetching orders:', err);
             }
-
-            const deleteUrl = `${backendUrl}/api/orders/${encodeURIComponent(mongoOrderId)}`;
-
-            fetch(deleteUrl, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    alert(`Order #${displayOrderId} marked as delivered and deleted successfully!`);
-                    loadOrders();
-                })
-                .catch(error => {
-                    alert('Failed to delete order: ' + error.message);
-                    if (checkboxEl) checkboxEl.checked = false;
-                });
         }
+
+        // Fetch immediately
+        fetchOrders();
+
+        // Auto-refresh every 5 seconds
+        setInterval(fetchOrders, 5000);
     </script>
+
+    <style>
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .orders-table th {
+            background: #4CAF50;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .orders-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .orders-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .orders-table tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</body>
+</html>
 </body>
 
 </html>
