@@ -205,18 +205,22 @@
                         <p><strong>Total Amount: ₹<span id="modalTotalAmount">0</span></strong></p>
                         <hr>
                         <p>Please confirm your details:</p>
-                        <form id="placeOrderForm">
+                        <form id="order-form">
                             <div class="mb-3">
-                                <label for="customerName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="customerName" required>
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="customerPhone" class="form-label">Phone Number</label>
-                                <input type="tel" class="form-control" id="customerPhone" required>
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
                             </div>
                             <div class="mb-3">
-                                <label for="customerAddress" class="form-label">Delivery Address</label>
-                                <textarea class="form-control" id="customerAddress" rows="3" required></textarea>
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Delivery Address</label>
+                                <textarea class="form-control" id="address" rows="3" required></textarea>
                             </div>
                         </form>
                         <div class="alert alert-info">
@@ -225,7 +229,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success" onclick="confirmPlaceOrder()">Confirm Order</button>
+                        <button type="submit" class="btn btn-success">Confirm Order</button>
                     </div>
                 </div>
             </div>
@@ -337,105 +341,43 @@
             modal.show();
         }
         
-        function confirmPlaceOrder() {
-            console.log('Order button clicked');
-            
-            const customerName = document.getElementById('customerName').value;
-            const customerPhone = document.getElementById('customerPhone').value;
-            const customerAddress = document.getElementById('customerAddress').value;
-            
-            console.log('Form data:', {customerName, customerPhone, customerAddress});
-            
-            if (!customerName || !customerPhone || !customerAddress) {
-                alert('Please fill in all details');
-                return;
-            }
-            
-            // Calculate total
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const deliveryFee = 40;
-            const total = subtotal + deliveryFee;
-            
-            // Create order object
-            const order = {
-                customerName,
-                customerPhone,
-                customerAddress,
-                orderItems: [...cart],
-                subtotal,
-                deliveryFee,
-                total,
-                timestamp: new Date().toISOString()
+        const backendUrl = 'https://restaurant-backend-0vmh.onrender.com'; // your backend
+
+        document.getElementById('order-form').addEventListener('submit', async (e)=>{
+            e.preventDefault();
+
+            // Collect all fields
+            const orderData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                items: cart.map(item => ({name: item.name, qty: item.quantity, price: item.price})), // your array of items
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) // total price
             };
-            
-            console.log('Order object:', order);
-            
-            // Get existing orders
-            let orders = [];
-            try {
-                const existing = localStorage.getItem('orders');
-                orders = existing ? JSON.parse(existing) : [];
-                console.log('Existing orders:', orders);
-            } catch (e) {
-                console.error('Error reading existing orders:', e);
-                orders = [];
-            }
-            
-            // Add new order
-            orders.push(order);
-            
-            // Save to localStorage
-            try {
-                localStorage.setItem('orders', JSON.stringify(orders));
-                console.log('Orders saved to localStorage:', orders);
-                
-                // Verify it was saved
-                const saved = localStorage.getItem('orders');
-                console.log('Verified saved orders:', saved);
-            } catch (e) {
-                console.error('Error saving orders:', e);
-                alert('Error saving order. Please try again.');
-                return;
-            }
-            
-            // Send to backend server
-            try {
-                fetch('https://restaurant-backend-0vmh.onrender.com/api/send-order', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(order)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Order sent to backend:', data);
-                    })
-                    .catch(error => {
-                    console.log('Backend error:', error);
+
+            try{
+                const res = await fetch(`${backendUrl}/api/send-order`,{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify(orderData)
                 });
-            } catch (error) {
-                console.log('Fetch failed:', error);
+                const data = await res.json();
+                console.log('✅ Order sent:', data);
+                alert('Order placed successfully!');
+                
+                // Clear cart and close modal
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCart();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('placeOrderModal'));
+                modal.hide();
+            }catch(err){
+                console.error('❌ Error sending order:', err);
+                alert('Failed to place order');
             }
-            
-            // Clear cart
-            cart = [];
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-            
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('placeOrderModal'));
-            modal.hide();
-            
-            // Reset form
-            document.getElementById('customerName').value = '';
-            document.getElementById('customerPhone').value = '';
-            document.getElementById('customerAddress').value = '';
-            
-            // Show success message
-            alert('✅ Order successful!\n\nWe will contact you soon at:\n📞 +91 8072007223');
-        }
-        
+        });
+
         // Initialize cart
         renderCart();
     </script>
