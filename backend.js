@@ -4,11 +4,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const dbConfig = require('./database-config.cjs');
 
 const app = express();
 
-// Enable CORS for all origins
+// Enable CORS
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -20,7 +19,9 @@ app.use(express.json());
 // Serve static files (HTML, CSS, JS, images)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Order schema for MongoDB
+// =========================
+// MongoDB Schema
+// =========================
 const orderSchema = new mongoose.Schema({
     customer_name: { type: String, required: true },
     customer_phone: { type: String, required: true },
@@ -35,45 +36,52 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
-// Root route - serve frontend
+// =========================
+// Routes
+// =========================
+
+// Root route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Send order
 app.post('/api/send-order', async (req, res) => {
     try {
         const { customerName, customerPhone, customerAddress, orderItems, subtotal, deliveryFee, total } = req.body;
-        
+
         if (!customerName || !customerPhone || !customerAddress || !orderItems) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
-        
+
         const order = new Order({
             customer_name: customerName,
             customer_phone: customerPhone,
             customer_address: customerAddress,
             order_items: orderItems,
-            subtotal: subtotal,
+            subtotal,
             delivery_fee: deliveryFee,
-            total: total,
+            total,
             status: 'pending'
         });
-        
+
         const savedOrder = await order.save();
-        console.log(`✅ Order saved: ${customerName} - ${customerPhone} - ₹${total}`);
-        
-        res.json({ 
-            success: true, 
+
+        console.log(`✅ Order saved: ${customerName} - ₹${total}`);
+
+        res.json({
+            success: true,
             message: 'Order received successfully!',
             orderId: savedOrder._id
         });
+
     } catch (err) {
         console.error('❌ Database error:', err);
-        return res.status(500).json({ error: 'Database error' });
+        res.status(500).json({ error: 'Database error' });
     }
 });
 
-// Get all orders endpoint
+// Get all orders (Admin panel)
 app.get('/api/orders', async (req, res) => {
     try {
         const orders = await Order.find().sort({ created_at: -1 });
@@ -81,40 +89,32 @@ app.get('/api/orders', async (req, res) => {
         res.json(orders);
     } catch (err) {
         console.error('❌ Error fetching orders:', err);
-        return res.status(500).json({ error: 'Database error' });
+        res.status(500).json({ error: 'Database error' });
     }
 });
 
-// Test endpoint
+// Test API
 app.get('/api/test', (req, res) => {
-    res.json({ 
+    res.json({
         message: 'Backend is working!',
         timestamp: new Date().toISOString()
     });
 });
 
-// Connect to MongoDB and start server
-const uri = `mongodb+srv://${dbConfig.user}:${encodeURIComponent(dbConfig.password)}@${dbConfig.host}/${dbConfig.dbName}?retryWrites=true&w=majority&authSource=admin`;
-console.log('🔗 MongoDB URI:', uri);
+// =========================
+// Connect MongoDB & Start Server
+// =========================
 
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-    mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }).then(() => {
-        console.log('✅ MongoDB Atlas connected');
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`🚀 Server running on http://localhost:${PORT}`);
-            console.log(`🌐 Restaurant: http://localhost:${PORT}/`);
-            console.log(`📊 Admin Panel: http://localhost:${PORT}/admin.html`);
-            console.log(`🧪 Test API: http://localhost:${PORT}/api/test`);
-        });
-    }).catch(err => {
-        console.error('❌ MongoDB connection failed:', err);
+mongoose.connect(process.env.MONGO_URI)
+.then(() => {
+    console.log("✅ MongoDB Connected");
+
+    const PORT = process.env.PORT || 3000;
+
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
     });
-}
-
-// For Vercel serverless
-module.exports = app;
+})
+.catch(err => {
+    console.error("❌ MongoDB connection failed:", err);
+});
