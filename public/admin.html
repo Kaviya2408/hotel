@@ -185,40 +185,41 @@
     </table>
 
     <script>
-        const backendUrl = 'https://restaurant-backend-0vmh.onrender.com'; // replace with your backend URL
+    const backendUrl = 'https://restaurant-backend-0vmh.onrender.com'; // replace with your backend URL
 
-        async function fetchOrders() {
-            try {
-                const response = await fetch(`${backendUrl}/api/orders`);
-                const orders = await response.json();
+    async function fetchOrders() {
+        try {
+            const response = await fetch(`${backendUrl}/api/orders`);
+            const orders = await response.json();
 
-                const tbody = document.getElementById('orders-table-body');
-                tbody.innerHTML = '';
+            const tbody = document.getElementById('orders-table-body');
+            tbody.innerHTML = ''; // Clear previous orders
 
-                orders.forEach(order => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${order.name || order.customer_name || 'N/A'}</td>
-                        <td>${order.email || 'N/A'}</td>
-                        <td>${order.phone || order.customer_phone || 'N/A'}</td>
-                        <td>${order.address || order.customer_address || 'N/A'}</td>
-                        <td>${order.items ? order.items.map(i => i.name).join(', ') : 'N/A'}</td>
-                        <td>${order.total || 'N/A'}</td>
-                        <td>${order.status || 'pending'}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            } catch (err) {
-                console.error('❌ Error fetching orders:', err);
-            }
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${order.name || 'N/A'}</td>
+                    <td>${order.email || 'N/A'}</td>
+                    <td>${order.phone || 'N/A'}</td>
+                    <td>${order.address || 'N/A'}</td>
+                    <td>${order.items ? order.items.map(i => i.name).join(', ') : 'N/A'}</td>
+                    <td>${order.total || 'N/A'}</td>
+                    <td>${order.status || 'pending'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+        } catch (err) {
+            console.error('❌ Error fetching orders:', err);
         }
+    }
 
-        // Fetch immediately
-        fetchOrders();
+    // Fetch immediately on page load
+    fetchOrders();
 
-        // Auto-refresh every 5 seconds
-        setInterval(fetchOrders, 5000);
-    </script>
+    // Auto-refresh every 5 seconds
+    setInterval(fetchOrders, 5000);
+</script>
 
     <style>
         .orders-table {
