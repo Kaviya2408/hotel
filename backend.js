@@ -1,4 +1,5 @@
-// Make sure you have this at the top of backend.js
+
+// deploy test
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
@@ -6,117 +7,146 @@ const path = require('path');
 
 const app = express();
 
-// Enable CORS
+/* -------------------- MIDDLEWARE -------------------- */
+
+// CORS
 app.use(cors({
     origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type']
 }));
 
+// JSON parser
 app.use(express.json());
 
-// Serve static files (HTML, CSS, JS, images)
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Your Order schema
+
+/* -------------------- MONGODB -------------------- */
+
+const mongoURI = process.env.MONGO_URI;
+
+if (!mongoURI) {
+    console.error("❌ MONGO_URI not found in environment variables");
+    process.exit(1);
+}
+
+mongoose.connect(mongoURI)
+    .then(() => console.log('✅ MongoDB connected'))
+    .catch(err => {
+        console.error('❌ MongoDB connection error:', err);
+        process.exit(1);
+    });
+
+
+/* -------------------- ORDER MODEL -------------------- */
+
 const orderSchema = new mongoose.Schema({
-	name: String,
-	email: String,
-	phone: String,
-	address: String,
-	items: Array,
-	total: Number,
-	created_at: { type: Date, default: Date.now },
-	status: { type: String, default: 'pending' }
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    address: { type: String, required: true },
+    items: { type: Array, required: true },
+    total: { type: Number, required: true },
+    status: { type: String, default: 'pending' },
+    created_at: { type: Date, default: Date.now }
 });
 
-// Define the model exactly as "Order"
-const Order = mongoose.model('Order', orderSchema); // 👈 Important
+const Order = mongoose.model('Order', orderSchema);
 
-// Route to save a new order
-app.post('/api/send-order', async (req, res) => {
-	try {
-		const order = new Order(req.body);
-		const savedOrder = await order.save();
-		console.log('✅ Order saved:', savedOrder);
-		res.json({ message: 'Order saved successfully' });
-	} catch (err) {
-		console.error(' Error saving order:', err);
-		res.status(500).json({ error: 'Database error' });
-	}
-});
 
-// Test endpoint to verify backend is working
+/* -------------------- ROUTES -------------------- */
+
+// Test route
 app.get('/api/test', (req, res) => {
-    res.json({ 
-        message: 'Backend is working!',
-        timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV || 'development'
+    res.json({
+        message: "Backend is working!",
+        timestamp: new Date()
     });
 });
 
-// Route to fetch all orders for admin panel
-app.get('/api/orders', async (req, res) => {
-	try {
-		const orders = await Order.find().sort({ created_at: -1 }); // newest first
-		console.log(` Admin panel: ${orders.length} orders found`);
-		res.json(orders);
-	} catch (err) {
-		console.error(' Error fetching orders:', err);
-		res.status(500).json({ error: 'Database error' });
-	}
+// ✅ CREATE ORDER
+app.post('/api/orders', async (req, res) => {
+    try {
+        const { name, email, phone, address, items, total } = req.body;
+
+        if (!name || !email || !phone || !address || !items || !total) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const order = new Order(req.body);
+        const savedOrder = await order.save();
+
+        console.log("✅ Order saved:", savedOrder._id);
+
+        res.status(201).json({
+            message: "Order placed successfully",
+            order: savedOrder
+        });
+
+    } catch (err) {
+        console.error("❌ Error saving order:", err);
+        res.status(500).json({ error: "Server error" });
+    }
 });
 
-// Route to update order status
+// ✅ GET ALL ORDERS
+app.get('/api/orders', async (req, res) => {
+    try {
+        const orders = await Order.find().sort({ created_at: -1 });
+        res.json(orders);
+    } catch (err) {
+        console.error("❌ Error fetching orders:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// ✅ UPDATE ORDER STATUS
 app.put('/api/orders/:id/status', async (req, res) => {
     try {
         const { status } = req.body;
+
         const order = await Order.findByIdAndUpdate(
             req.params.id,
             { status },
             { new: true }
         );
-        
+
         if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
+            return res.status(404).json({ error: "Order not found" });
         }
-        
-        console.log(` Order ${req.params.id} status updated to: ${status}`);
+
         res.json(order);
+
     } catch (err) {
-        console.error(' Error updating order status:', err);
-        res.status(500).json({ error: 'Database error' });
+        console.error("❌ Error updating status:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-// Route to delete an order
+// ✅ DELETE ORDER
 app.delete('/api/orders/:id', async (req, res) => {
     try {
         const order = await Order.findByIdAndDelete(req.params.id);
-        
+
         if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
+            return res.status(404).json({ error: "Order not found" });
         }
-        
-        console.log(` Order ${req.params.id} deleted successfully`);
-        res.json({ message: 'Order deleted successfully' });
+
+        res.json({ message: "Order deleted successfully" });
+
     } catch (err) {
-        console.error(' Error deleting order:', err);
-        res.status(500).json({ error: 'Database error' });
+        console.error("❌ Error deleting order:", err);
+        res.status(500).json({ error: "Server error" });
     }
 });
 
-// MongoDB Connection
-const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/restaurant';
 
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB connection error:', err));
+/* -------------------- SERVER -------------------- */
 
-// Server Start
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-    console.log(` Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
