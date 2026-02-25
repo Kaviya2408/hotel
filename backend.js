@@ -1,5 +1,5 @@
-
 // deploy test
+require('dotenv').config();
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
@@ -54,6 +54,19 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model('Order', orderSchema);
+
+/* -------------------- REVIEW MODEL -------------------- */
+
+const reviewSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    date: { type: String, required: true },
+    text: { type: String, required: true },
+    helpful: { type: Number, default: 0 },
+    created_at: { type: Date, default: Date.now }
+});
+
+const Review = mongoose.model('Review', reviewSchema);
 
 
 /* -------------------- ROUTES -------------------- */
@@ -142,6 +155,87 @@ app.delete('/api/orders/:id', async (req, res) => {
     }
 });
 
+/* -------------------- REVIEW ROUTES -------------------- */
+
+// ✅ CREATE REVIEW
+app.post('/api/reviews', async (req, res) => {
+    try {
+        const { name, rating, date, text, helpful } = req.body;
+
+        if (!name || !rating || !date || !text) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const review = new Review({
+            name,
+            rating,
+            date,
+            text,
+            helpful: helpful || 0
+        });
+        
+        const savedReview = await review.save();
+        console.log("✅ Review saved:", savedReview._id);
+
+        res.status(201).json({
+            message: "Review posted successfully",
+            review: savedReview
+        });
+
+    } catch (err) {
+        console.error("❌ Error saving review:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// ✅ GET ALL REVIEWS
+app.get('/api/reviews', async (req, res) => {
+    try {
+        const reviews = await Review.find().sort({ created_at: -1 });
+        res.json(reviews);
+    } catch (err) {
+        console.error("❌ Error fetching reviews:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// ✅ DELETE REVIEW
+app.delete('/api/reviews/:id', async (req, res) => {
+    try {
+        const review = await Review.findByIdAndDelete(req.params.id);
+
+        if (!review) {
+            return res.status(404).json({ error: "Review not found" });
+        }
+
+        res.json({ message: "Review deleted successfully" });
+
+    } catch (err) {
+        console.error("❌ Error deleting review:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
+
+// ✅ MARK REVIEW AS HELPFUL
+app.put('/api/reviews/:id/helpful', async (req, res) => {
+    try {
+        const review = await Review.findByIdAndUpdate(
+            req.params.id,
+            { $inc: { helpful: 1 } },
+            { new: true }
+        );
+
+        if (!review) {
+            return res.status(404).json({ error: "Review not found" });
+        }
+
+        res.json(review);
+
+    } catch (err) {
+        console.error("❌ Error updating helpful count:", err);
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 /* -------------------- SERVER -------------------- */
 

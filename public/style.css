@@ -1367,7 +1367,7 @@ a {
     color: var(--gray-color);
 }
 
-/* Floating Review Form */
+/* Floating Review Overlay */
 .floating-form-overlay {
     position: fixed;
     top: 0;
@@ -1375,10 +1375,11 @@ a {
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,0.5);
-    z-index: 1000;
+    backdrop-filter: blur(3px);
     opacity: 0;
     visibility: hidden;
-    transition: var(--transition);
+    transition: 0.3s;
+    z-index: 999;
 }
 
 .floating-form-overlay.active {
@@ -1386,27 +1387,27 @@ a {
     visibility: visible;
 }
 
+/* Floating Review Form */
 .floating-form {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--white);
-    border-radius: 15px;
-    padding: 2rem;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: white;
     width: 90%;
     max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    z-index: 1001;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
     opacity: 0;
     visibility: hidden;
-    transition: var(--transition);
+    transition: 0.3s;
+    z-index: 1000;
 }
 
 .floating-form.active {
     opacity: 1;
     visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
 }
 
 .form-header {
@@ -1625,11 +1626,30 @@ a {
     cursor: pointer;
     font-size: 0.8rem;
     transition: var(--transition);
+    margin-right: 0.5rem;
 }
 
 .helpful-btn:hover {
     background: var(--primary-color);
     color: var(--white);
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.delete-btn:hover {
+    background: #c82333;
+    color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
 }
 
 .helpful-count {
