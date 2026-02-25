@@ -2,32 +2,412 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Menu - Delicious Restaurant</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Mobile First Responsive Design */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            overflow-x: hidden;
         }
-        .menu-container {
-            min-height: calc(100vh - 70px);
-            padding: 2rem;
-            max-width: 1400px;
+        
+        /* Navigation Mobile */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 15px;
         }
-        .menu-header {
+        
+        .nav-wrapper {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            gap: 1.5rem;
         }
-        .menu-title {
-            font-size: 2.5rem;
-            color: var(--primary-color);
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .logo span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .nav-menu {
+            display: none;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-menu li {
             margin: 0;
         }
+        
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            display: block;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #ff6b6b;
+        }
+        
+        .cart-link {
+            position: relative;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+        
+        /* Menu Container Mobile */
+        .menu-container {
+            min-height: calc(100vh - 70px);
+            padding: 100px 15px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .menu-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .menu-title {
+            font-size: 2rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            white-space: nowrap;
+        }
+        
+        .menu-item-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .menu-item-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 0.25rem;
+        }
+        
+        .quantity-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background: #e55555;
+        }
+        
+        .quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .add-to-cart-btn {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: #3db8b0;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer Mobile */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #ff6b6b;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-col a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-col a:hover {
+            color: #ff6b6b;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+        }
+        
+        /* Tablet and Desktop */
+        @media (min-width: 768px) {
+            .nav-menu {
+                display: flex;
+                gap: 2rem;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .menu-container {
+                padding: 120px 2rem 4rem;
+            }
+            
+            .menu-header {
+                text-align: left;
+            }
+            
+            .menu-title {
+                font-size: 2.5rem;
+            }
+            
+            .menu-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .category-filters {
+                justify-content: flex-start;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .menu-item-content {
+                padding: 2rem;
+            }
+            
+            .menu-item-name {
+                font-size: 1.4rem;
+            }
+            
+            .menu-item-price {
+                font-size: 1.4rem;
+            }
+            
+            .menu-item-description {
+                font-size: 1rem;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Prevent zoom on input focus (iOS) */
+        @supports (-webkit-touch-callout: none) {
+            input, textarea, select {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
         .categories-toggle {
             background: transparent;
             color: var(--primary-color);
