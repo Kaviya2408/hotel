@@ -46,6 +46,15 @@ app.post('/api/send-order', async (req, res) => {
 	}
 });
 
+// Test endpoint to verify backend is working
+app.get('/api/test', (req, res) => {
+    res.json({ 
+        message: 'Backend is working!',
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV || 'development'
+    });
+});
+
 // Route to fetch all orders for admin panel
 app.get('/api/orders', async (req, res) => {
 	try {
@@ -58,10 +67,51 @@ app.get('/api/orders', async (req, res) => {
 	}
 });
 
+// Route to update order status
+app.put('/api/orders/:id/status', async (req, res) => {
+    try {
+        const { status } = req.body;
+        const order = await Order.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        );
+        
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        
+        console.log(` Order ${req.params.id} status updated to: ${status}`);
+        res.json(order);
+    } catch (err) {
+        console.error(' Error updating order status:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+// Route to delete an order
+app.delete('/api/orders/:id', async (req, res) => {
+    try {
+        const order = await Order.findByIdAndDelete(req.params.id);
+        
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+        
+        console.log(` Order ${req.params.id} deleted successfully`);
+        res.json({ message: 'Order deleted successfully' });
+    } catch (err) {
+        console.error(' Error deleting order:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true
+const mongoURI = process.env.MONGO_URI || 'mongodb://localhost:27017/restaurant';
+
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log('MongoDB connection error:', err));
 

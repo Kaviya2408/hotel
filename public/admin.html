@@ -5,33 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Admin - Orders Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: #f8f9fa;
+            background: var(--bg-color);
+            min-height: 100vh;
         }
 
         .admin-header {
-            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 30px;
+            border-radius: 16px;
             text-align: center;
             margin-bottom: 30px;
+            box-shadow: var(--shadow-hover);
         }
 
         .admin-header h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 2rem;
+            font-weight: 700;
         }
 
         .admin-header p {
             margin: 10px 0 0 0;
-            opacity: 0.9;
+            opacity: 0.95;
+            font-size: 1rem;
         }
 
         .orders-container {
@@ -39,60 +42,115 @@
             margin: 0 auto;
         }
 
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
         .order-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #ff4500;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
 
         .order-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--bg-color);
         }
 
         .order-id {
             font-weight: bold;
-            color: #ff4500;
+            color: var(--primary-color);
+            font-size: 1.2rem;
         }
 
         .order-time {
-            color: #666;
-            font-size: 14px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: rgba(179, 157, 219, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .status-delivered {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
         }
 
         .customer-info {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
         }
 
         .customer-info h3 {
-            margin: 0 0 10px 0;
-            color: #333;
+            margin: 0 0 12px 0;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .customer-info p {
+            margin: 8px 0;
+            color: var(--gray-color);
+            font-size: 0.95rem;
+        }
+
+        .customer-info strong {
+            color: var(--dark-color);
         }
 
         .order-items {
-            background: #fff;
-            padding: 15px;
-            border-radius: 8px;
+            background: var(--white);
+            padding: 0;
+            border-radius: 12px;
+            margin-bottom: 15px;
         }
 
         .order-items h4 {
-            margin: 0 0 10px 0;
-            color: #333;
+            margin: 0 0 15px 0;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--bg-color);
         }
 
         .item:last-child {
@@ -101,116 +159,568 @@
 
         .item-name {
             flex: 1;
+            color: var(--dark-color);
+            font-weight: 500;
         }
 
         .item-quantity {
-            color: #666;
-            font-size: 14px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            margin: 0 15px;
         }
 
         .item-price {
             font-weight: bold;
-            color: #ff4500;
+            color: var(--primary-color);
+            min-width: 80px;
+            text-align: right;
         }
 
         .order-total {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 15px 20px;
+            border-radius: 12px;
             text-align: right;
-            font-size: 18px;
+            font-size: 1.2rem;
             font-weight: bold;
-        }
-
-        .status-new {
-            background: #28a745;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-block;
         }
 
         .no-orders {
             text-align: center;
-            padding: 60px 20px;
-            color: #666;
+            padding: 80px 20px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .no-orders h3 {
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .no-orders p {
+            color: var(--gray-color);
+            font-size: 1rem;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--bg-color);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-state h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        .loading-state p {
+            color: var(--gray-color);
         }
 
         .refresh-btn {
-            background: #ff4500;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             border: none;
             padding: 12px 24px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1rem;
+            font-weight: 600;
             margin-top: 20px;
+            transition: var(--transition);
         }
 
         .refresh-btn:hover {
-            background: #ff6b35;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
 
-        .delivered-checkbox {
-            margin-top: 15px;
-            text-align: right;
+        .filter-section {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-container label {
+            font-weight: 600;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-container select {
+            padding: 10px 15px;
+            border: 2px solid var(--bg-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--white);
+            color: var(--dark-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-container select:hover {
+            border-color: var(--primary-color);
+        }
+
+        .filter-container select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(179, 157, 219, 0.1);
+        }
+
+        .orders-count {
+            margin-left: auto;
+            padding: 10px 15px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .delivery-btn {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-transform: uppercase;
+        }
+
+        .delivery-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .delivery-btn:active {
+            transform: translateY(0);
+        }
+
+        .delivery-btn i {
+            font-size: 0.85rem;
+        }
+
+        .status-delivered {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        @media (max-width: 768px) {
+            .orders-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .orders-count {
+                margin-left: 0;
+                text-align: center;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="admin-header">
-        <h1>🍽️ Restaurant Admin Dashboard</h1>
-        <p>Orders Management System</p>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <table class="orders-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Items</th>
-                <th>Total</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="orders-table-body">
-            <tr>
-                <td colspan="7">Loading orders...</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="admin-header">
+        <h1>🍽️ Restaurant Admin Dashboard</h1>
+        <p>Today's Orders: <span id="todayOrderCount">0</span></p>
+    </div>
+    </div>
+
+    <div class="filter-section">
+        <div class="filter-container">
+            <label for="dateFilter">
+                <i class="fas fa-calendar"></i> Filter by Date:
+            </label>
+            <select id="dateFilter" onchange="filterOrders()">
+                <option value="today">Today Only</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="week">Last 7 Days</option>
+                <option value="month">Last 30 Days</option>
+                <option value="all">All Orders</option>
+            </select>
+            <div class="orders-count">Showing 0 orders</div>
+        </div>
+    </div>
+
+    <div class="orders-container" id="orders-container">
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <h3>Loading orders...</h3>
+            <p>Please wait while we fetch the latest orders.</p>
+        </div>
+    </div>
 
     <script>
-    const backendUrl = 'https://restaurant-backend-0vmh.onrender.com'; // replace with your backend URL
+    const backendUrl = 'https://restaurant-backend-0vmh.onrender.com';
+    let allOrders = [];
+    let currentFilter = 'today';
+
+    // Function to check if a date is today
+    function isToday(dateString) {
+        if (!dateString) return false;
+        const orderDate = new Date(dateString);
+        const today = new Date();
+        
+        return orderDate.getDate() === today.getDate() &&
+               orderDate.getMonth() === today.getMonth() &&
+               orderDate.getFullYear() === today.getFullYear();
+    }
+
+    // Function to check if a date is yesterday
+    function isYesterday(dateString) {
+        if (!dateString) return false;
+        const orderDate = new Date(dateString);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        return orderDate.getDate() === yesterday.getDate() &&
+               orderDate.getMonth() === yesterday.getMonth() &&
+               orderDate.getFullYear() === yesterday.getFullYear();
+    }
+
+    // Function to check if date is within last N days
+    function isWithinDays(dateString, days) {
+        if (!dateString) return false;
+        const orderDate = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - orderDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays <= days;
+    }
+
+    // Function to filter orders based on selected filter
+    function filterOrders() {
+        const filterValue = document.getElementById('dateFilter').value;
+        currentFilter = filterValue;
+        
+        let filteredOrders = [];
+        
+        switch(filterValue) {
+            case 'today':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isToday(orderDate);
+                });
+                break;
+            case 'yesterday':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isYesterday(orderDate);
+                });
+                break;
+            case 'week':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isWithinDays(orderDate, 7);
+                });
+                break;
+            case 'month':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isWithinDays(orderDate, 30);
+                });
+                break;
+            case 'all':
+                filteredOrders = allOrders;
+                break;
+        }
+        
+        displayOrders(filteredOrders);
+        updateOrdersCount(filteredOrders.length);
+    }
+
+    // Function to update orders count display
+    function updateOrdersCount(count) {
+        const countElement = document.querySelector('.orders-count');
+        if (countElement) {
+            countElement.textContent = `Showing ${count} order${count !== 1 ? 's' : ''}`;
+        }
+        
+        // Update today's order count in header
+        const todayOrders = allOrders.filter(order => {
+            const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+            return isToday(orderDate);
+        });
+        document.getElementById('todayOrderCount').textContent = todayOrders.length;
+    }
+
+    // Function to display orders
+    function displayOrders(orders) {
+        const container = document.getElementById('orders-container');
+        container.innerHTML = ''; // Clear previous orders
+
+        if (orders.length === 0) {
+            let message = '';
+            switch(currentFilter) {
+                case 'today':
+                    message = 'No orders today';
+                    break;
+                case 'yesterday':
+                    message = 'No orders yesterday';
+                    break;
+                case 'week':
+                    message = 'No orders in the last 7 days';
+                    break;
+                case 'month':
+                    message = 'No orders in the last 30 days';
+                    break;
+                case 'all':
+                    message = 'No orders found';
+                    break;
+            }
+            
+            container.innerHTML = `
+                <div class="no-orders">
+                    <h3>${message}</h3>
+                    <p>Orders will appear here when customers place them.</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">Total orders in system: ${allOrders.length}</p>
+                </div>
+            `;
+            return;
+        }
+
+        const ordersGrid = document.createElement('div');
+        ordersGrid.className = 'orders-grid';
+
+        orders.forEach((order, index) => {
+            const orderCard = document.createElement('div');
+            orderCard.className = 'order-card';
+            
+            const uniqueOrderId = order._id;
+            console.log('📍 Displaying order with ID:', uniqueOrderId, 'at index:', index);
+            
+            // Handle different order formats
+            const orderTime = order.created_at || order.timestamp || order.date || order.orderDate || new Date().toISOString();
+            const orderItems = order.items || order.cart || [];
+            const orderTotal = order.total || order.totalAmount || '0';
+            
+            orderCard.innerHTML = `
+                <div class="order-header">
+                    <div>
+                        <div class="order-id">Order #${index + 1}</div>
+                        <div class="order-time">${new Date(orderTime).toLocaleString()}</div>
+                    </div>
+                    ${(order.status === 'pending' || !order.status) ? `
+                        <button class="delivery-btn" onclick="markAsDelivered('${uniqueOrderId}')">
+                            <i class="fas fa-check-circle"></i>
+                            Mark as Delivered
+                        </button>
+                    ` : `
+                        <span class="status-badge status-${order.status || 'pending'}">${order.status || 'pending'}</span>
+                    `}
+                </div>
+                
+                <div class="customer-info">
+                    <h3>👤 Customer Information</h3>
+                    <p><strong>Name:</strong> ${order.name || order.customerName || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${order.email || order.customerEmail || 'N/A'}</p>
+                    <p><strong>Phone:</strong> ${order.phone || order.phoneNumber || 'N/A'}</p>
+                    <p><strong>Address:</strong> ${order.address || order.deliveryAddress || 'N/A'}</p>
+                </div>
+                
+                <div class="order-items">
+                    <h4>🛒 Order Items</h4>
+                    ${orderItems.length > 0 ? orderItems.map(item => `
+                        <div class="item">
+                            <span class="item-name">${item.name || item.dishName || 'Item'}</span>
+                            <span class="item-quantity">x${item.qty || item.quantity || 1}</span>
+                            <span class="item-price">₹${item.price || item.totalPrice || '0'}</span>
+                        </div>
+                    `).join('') : '<p>No items</p>'}
+                </div>
+                
+                <div class="order-total">
+                    <strong>Total: ₹${orderTotal}</strong>
+                </div>
+            `;
+            ordersGrid.appendChild(orderCard);
+        });
+
+        container.appendChild(ordersGrid);
+    }
+
+    // Function to mark order as delivered and delete it
+    async function markAsDelivered(orderId) {
+        try {
+            console.log('🔄 Starting delivery process for order:', orderId);
+            
+            // Show confirmation dialog
+            const confirmed = confirm('Are you sure you want to mark this order as delivered? It will be automatically removed from the system.');
+            if (!confirmed) {
+                console.log('❌ User cancelled delivery action');
+                return;
+            }
+
+            // Find the order in allOrders array
+            const targetOrder = allOrders.find(order => order._id === orderId);
+            
+            if (!targetOrder) {
+                console.error('❌ Order not found in allOrders array:', orderId);
+                console.error('❌ Available order IDs:', allOrders.map(o => o._id));
+                alert('Order not found. Please refresh page.');
+                return;
+            }
+            
+            console.log('📍 Found order to delete:', orderId, targetOrder);
+
+            // Update status to delivered
+            try {
+                console.log('🌐 Attempting backend update for order:', orderId);
+                
+                const updateResponse = await fetch(`${backendUrl}/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'delivered' })
+                });
+
+                console.log('📝 Backend update response status:', updateResponse.status);
+
+                if (updateResponse.ok) {
+                    console.log('✅ Status updated successfully, now deleting order');
+                    
+                    // Delete the order
+                    const deleteResponse = await fetch(`${backendUrl}/api/orders/${orderId}`, {
+                        method: 'DELETE'
+                    });
+
+                    console.log('🗑️ Backend delete response status:', deleteResponse.status);
+
+                    if (deleteResponse.ok) {
+                        console.log(`✅ Order ${orderId} marked as delivered and deleted from backend`);
+                        
+                        // Remove from local array
+                        const indexToRemove = allOrders.findIndex(order => order._id === orderId);
+                        
+                        if (indexToRemove !== -1) {
+                            allOrders.splice(indexToRemove, 1);
+                            console.log('🔄 Removed order from local array at index:', indexToRemove);
+                        }
+                        
+                        // Refresh orders list
+                        filterOrders();
+                        return;
+                    } else {
+                        console.error('❌ Backend delete failed:', deleteResponse.statusText);
+                        alert('Failed to delete order. Please try again.');
+                    }
+                } else {
+                    console.error('❌ Backend update failed:', updateResponse.statusText);
+                    alert('Failed to update order status. Please try again.');
+                }
+            } catch (backendError) {
+                console.error('❌ Backend error:', backendError);
+                alert('Backend connection error. Please check your connection.');
+            }
+
+        } catch (err) {
+            console.error('❌ Error marking order as delivered:', err);
+            alert('Error marking order as delivered: ' + err.message);
+        }
+    }
 
     async function fetchOrders() {
         try {
+            console.log('🔄 Fetching orders from backend...');
+            console.log('🌐 Backend URL:', backendUrl);
+            
+            // Fetch from backend only
             const response = await fetch(`${backendUrl}/api/orders`);
+            
+            console.log('📡 Response status:', response.status);
+            console.log('📡 Response ok:', response.ok);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const orders = await response.json();
+            console.log('📦 Raw orders from backend:', orders);
+            
+            allOrders = orders;
+            
+            console.log('✅ Orders fetched from backend:', allOrders.length);
+            console.log('All orders:', allOrders);
 
-            const tbody = document.getElementById('orders-table-body');
-            tbody.innerHTML = ''; // Clear previous orders
-
-            orders.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${order.name || 'N/A'}</td>
-                    <td>${order.email || 'N/A'}</td>
-                    <td>${order.phone || 'N/A'}</td>
-                    <td>${order.address || 'N/A'}</td>
-                    <td>${order.items ? order.items.map(i => i.name).join(', ') : 'N/A'}</td>
-                    <td>${order.total || 'N/A'}</td>
-                    <td>${order.status || 'pending'}</td>
-                `;
-                tbody.appendChild(row);
-            });
+            // Apply current filter
+            filterOrders();
 
         } catch (err) {
             console.error('❌ Error fetching orders:', err);
+            console.error('❌ Full error details:', err.stack);
+            const container = document.getElementById('orders-container');
+            container.innerHTML = `
+                <div class="no-orders">
+                    <h3>Error loading orders</h3>
+                    <p>Please check your internet connection and try again.</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">${err.message}</p>
+                    <p style="font-size: 0.8rem; margin-top: 1rem;">Backend URL: ${backendUrl}</p>
+                    <button class="refresh-btn" onclick="fetchOrders()">
+                        <i class="fas fa-sync"></i> Retry
+                    </button>
+                </div>
+            `;
+            document.getElementById('todayOrderCount').textContent = '0';
+            updateOrdersCount(0);
         }
     }
 
@@ -220,41 +730,7 @@
     // Auto-refresh every 5 seconds
     setInterval(fetchOrders, 5000);
 </script>
-
-    <style>
-        .orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .orders-table th {
-            background: #4CAF50;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-weight: bold;
-        }
-
-        .orders-table td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .orders-table tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .orders-table tr:last-child td {
-            border-bottom: none;
-        }
-    </style>
-</body>
-</html>
+<script src="script.js"></script>
 </body>
 
 </html>

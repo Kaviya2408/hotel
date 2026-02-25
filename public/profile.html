@@ -3,28 +3,106 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" href="style.css?v=20250105">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: var(--bg-color);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .floating-food {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .floating-food:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .floating-food:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        .floating-food:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+        .floating-food:nth-child(4) {
+            bottom: 20%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+        .floating-food:nth-child(5) {
+            top: 50%;
+            left: 5%;
+            animation-delay: 8s;
+        }
+        .floating-food:nth-child(6) {
+            top: 60%;
+            right: 5%;
+            animation-delay: 10s;
+        }
+        .floating-food:nth-child(7) {
+            top: 35%;
+            left: 25%;
+            animation-delay: 3s;
+            font-size: 2.5rem;
+        }
+        .floating-food:nth-child(8) {
+            top: 70%;
+            right: 25%;
+            animation-delay: 5s;
+            font-size: 2.5rem;
+        }
+        .floating-food:nth-child(9) {
+            bottom: 40%;
+            left: 8%;
+            animation-delay: 7s;
+            font-size: 2rem;
+        }
+        .floating-food:nth-child(10) {
+            top: 80%;
+            right: 20%;
+            animation-delay: 9s;
+            font-size: 2rem;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+            50% {
+                transform: translateY(-60px) rotate(-5deg);
+            }
+            75% {
+                transform: translateY(-30px) rotate(3deg);
+            }
         }
         .profile-card {
-            background: #ffffff;
+            background: var(--white);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow-hover);
             padding: 40px;
             max-width: 480px;
             width: 100%;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(109, 76, 65, 0.1);
+            position: relative;
+            z-index: 1;
         }
         .profile-header {
             text-align: center;
@@ -34,7 +112,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             display: flex;
             align-items: center;
@@ -42,29 +120,34 @@
             font-size: 32px;
             font-weight: 700;
             margin: 0 auto 20px;
-            box-shadow: 0 8px 24px rgba(255,69,0,0.2);
+            box-shadow: 0 8px 24px rgba(109, 76, 65, 0.3);
         }
         .profile-name {
             font-size: 24px;
             font-weight: 700;
-            color: #111827;
+            color: var(--dark-color);
             margin: 0 0 8px;
         }
         .profile-email {
             font-size: 14px;
-            color: #6b7280;
+            color: var(--gray-color);
             margin: 0;
         }
         .role-badge {
             display: inline-block;
-            background: rgba(255,69,0,0.1);
-            color: #ff4500;
+            background: rgba(179, 157, 219, 0.2);
+            color: var(--accent-color);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 700;
             margin: 20px 0;
-            border: 1px solid rgba(255,69,0,0.2);
+            border: 1px solid var(--accent-color);
+        }
+        .role-badge.admin {
+            background: rgba(109, 76, 65, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
         }
         .details-section {
             margin-top: 32px;
@@ -72,7 +155,7 @@
         .details-title {
             font-size: 16px;
             font-weight: 700;
-            color: #111827;
+            color: var(--dark-color);
             margin: 0 0 20px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -89,13 +172,13 @@
         }
         .detail-label {
             font-size: 13px;
-            color: #6b7280;
+            color: var(--gray-color);
             font-weight: 600;
             flex: 0 0 80px;
         }
         .detail-value {
             font-size: 13px;
-            color: #111827;
+            color: var(--dark-color);
             font-weight: 600;
             text-align: right;
             flex: 1;
@@ -116,38 +199,68 @@
             text-decoration: none;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
+            border: none;
+            display: inline-block;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            box-shadow: 0 4px 12px rgba(255,69,0,0.2);
+            box-shadow: 0 4px 12px rgba(109, 76, 65, 0.3);
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,69,0,0.3);
+            box-shadow: 0 6px 20px rgba(109, 76, 65, 0.4);
         }
         .btn-secondary {
-            background: #f8f9fa;
-            color: #6b7280;
-            border: 1px solid #e9ecef;
+            background: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
         }
         .btn-secondary:hover {
-            background: #e9ecef;
-            color: #495057;
+            background: var(--primary-color);
+            color: var(--white);
         }
         .btn-admin {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            box-shadow: 0 4px 12px rgba(40,167,69,0.2);
+            box-shadow: 0 4px 12px rgba(109, 76, 65, 0.3);
         }
         .btn-admin:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(40,167,69,0.3);
+            box-shadow: 0 6px 20px rgba(109, 76, 65, 0.4);
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Food Decorations -->
+    <div class="floating-food">🍛</div>
+    <div class="floating-food">🥘</div>
+    <div class="floating-food">🍜</div>
+    <div class="floating-food">🌯</div>
+    <div class="floating-food">🍲</div>
+    <div class="floating-food">🥙</div>
+    <div class="floating-food">🍕</div>
+    <div class="floating-food">🍝</div>
+    <div class="floating-food">🥗</div>
+    <div class="floating-food">🍱</div>
+
     <div class="profile-card">
         <div class="profile-header">
             <div class="avatar" id="avatar">U</div>
@@ -208,7 +321,11 @@
             const isAdmin = user.email === 'kit27.csbs29@gmail.com';
             const role = isAdmin ? 'ADMIN' : 'USER';
             document.getElementById('role-text').textContent = role;
-            document.getElementById('role-badge').textContent = role;
+            const roleBadge = document.getElementById('role-badge');
+            roleBadge.textContent = role;
+            if (isAdmin) {
+                roleBadge.classList.add('admin');
+            }
             
             // Show admin button for admin
             if (isAdmin) {
@@ -216,5 +333,6 @@
             }
         }
     </script>
+    <script src="script.js"></script>
 </body>
 </html>

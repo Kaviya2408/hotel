@@ -1,92 +1,365 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up - Delicious Restaurant</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { padding-top: 50px; font-family: 'Poppins', sans-serif; }
-        .form { width: 300px; margin: auto; }
-        .form-title { text-align: center; margin-bottom: 20px; }
-        input, textarea, button { width: 100%; margin-bottom: 10px; padding: 8px; }
-        button { background-color: #ff4500; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #e03e00; }
+        body {
+            background: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .floating-food {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+        .floating-food:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        .floating-food:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+        .floating-food:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+        .floating-food:nth-child(4) {
+            bottom: 20%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+        .floating-food:nth-child(5) {
+            top: 50%;
+            left: 5%;
+            animation-delay: 8s;
+        }
+        .floating-food:nth-child(6) {
+            top: 60%;
+            right: 5%;
+            animation-delay: 10s;
+        }
+        .floating-food:nth-child(7) {
+            top: 35%;
+            left: 25%;
+            animation-delay: 3s;
+            font-size: 2.5rem;
+        }
+        .floating-food:nth-child(8) {
+            top: 70%;
+            right: 25%;
+            animation-delay: 5s;
+            font-size: 2.5rem;
+        }
+        .floating-food:nth-child(9) {
+            bottom: 40%;
+            left: 8%;
+            animation-delay: 7s;
+            font-size: 2rem;
+        }
+        .floating-food:nth-child(10) {
+            top: 80%;
+            right: 20%;
+            animation-delay: 9s;
+            font-size: 2rem;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+            50% {
+                transform: translateY(-60px) rotate(-5deg);
+            }
+            75% {
+                transform: translateY(-30px) rotate(3deg);
+            }
+        }
+        .signup-container {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-hover);
+            max-width: 450px;
+            width: 90%;
+            max-height: 85vh;
+            position: relative;
+            z-index: 1;
+            margin: auto;
+            overflow-y: auto;
+        }
+        .signup-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .signup-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .signup-container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 10px;
+        }
+        .signup-container::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .signup-logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+        }
+        .signup-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: sepia(100%) saturate(300%) hue-rotate(330deg) brightness(0.8);
+        }
+        .signup-header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        .signup-header p {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .btn-signup {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        .divider span {
+            background: var(--white);
+            padding: 0 1rem;
+            position: relative;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        .login-link {
+            text-align: center;
+        }
+        .login-link p {
+            color: var(--gray-color);
+            margin-bottom: 1rem;
+        }
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .btn-login:hover {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+        .back-home {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .back-home a {
+            color: var(--gray-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        .back-home a:hover {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
-    <div class="form">
-        <h3 class="form-title">Sign Up</h3>
-        <form class="form-body" onsubmit="signupUser(event)">
-            <label>Name:</label>
-            <input type="text" name="name" required>
-
-            <label>Email:</label>
-            <input type="email" name="email" required>
-
-            <label>Phone Number:</label>
-            <input type="number" name="phone" required>
-
-            <label>Password:</label>
-            <input type="password" name="password" required>
-
-            <label>Address:</label>
-            <textarea name="address" placeholder="Your address..."></textarea>
-
-            <button type="submit">Submit</button>
-        </form>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+    <!-- Floating Food Decorations -->
+    <div class="floating-food">🍛</div>
+    <div class="floating-food">🥘</div>
+    <div class="floating-food">🍜</div>
+    <div class="floating-food">🌯</div>
+    <div class="floating-food">🍲</div>
+    <div class="floating-food">🥙</div>
+    <div class="floating-food">🍕</div>
+    <div class="floating-food">🍝</div>
+    <div class="floating-food">🥗</div>
+    <div class="floating-food">🍱</div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD5KKgtq-2Qd__pn_w6zWUPJpUwtaTw4Fg",
-            authDomain: "restaurant-app-fed29.firebaseapp.com",
-            projectId: "restaurant-app-fed29",
-            storageBucket: "restaurant-app-fed29.firebasestorage.app",
-            messagingSenderId: "613195852332",
-            appId: "1:613195852332:web:aa3a76d763d87cc2a07f89"
-        };
+    <div class="signup-container">
+        <div class="signup-header">
+            <div class="signup-logo">
+                <img src="logo.png" alt="Delicious Restaurant">
+            </div>
+            <h1>Create Account</h1>
+            <p>Join us for amazing food experiences</p>
+        </div>
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        <form onsubmit="signupUser(event)">
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
 
-        window.signupUser = function(event) {
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a password">
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required placeholder="Confirm your password">
+            </div>
+
+            <button type="submit" class="btn-signup">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <div class="login-link">
+            <p>Already have an account?</p>
+            <a href="login.html" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        </div>
+
+        <div class="back-home">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function signupUser(event) {
             event.preventDefault();
-
-            const name = document.querySelector('input[name="name"]').value;
-            const email = document.querySelector('input[name="email"]').value;
-            const phone = document.querySelector('input[name="phone"]').value;
-            const password = document.querySelector('input[name="password"]').value;
-            const address = document.querySelector('textarea[name="address"]').value;
-
-            // 1️⃣ Create user in Firebase Auth
-            createUserWithEmailAndPassword(auth, email, password)
-            .then(userCredential => {
-                const user = userCredential.user;
-                console.log("Firebase user created:", user.uid);
-
-                // 2️⃣ Send user info to backend MySQL
-                fetch('/signup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone, password, address })
-                })
-                .then(res => res.text())
-                .then(data => {
-                    alert(`Welcome ${name}! Signup successful. Please login.`);
-                    window.location.href = "login.html";
-                })
-                .catch(err => console.error("Backend signup error:", err));
-            })
-            .catch(error => {
-                console.error("Firebase signup error:", error.message);
-                alert(error.message);
-            });
-        };
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Store user data
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('currentUser', JSON.stringify({
+                name: name,
+                email: email
+            }));
+            
+            alert('Account created successfully!');
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
+        }
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
