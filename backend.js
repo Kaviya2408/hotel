@@ -71,6 +71,11 @@ const Review = mongoose.model('Review', reviewSchema);
 
 /* -------------------- ROUTES -------------------- */
 
+// Serve frontend pages
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Test route
 app.get('/api/test', (req, res) => {
     res.json({
