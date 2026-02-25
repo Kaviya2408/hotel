@@ -268,34 +268,51 @@ function showPlaceOrderModal() {
 document.getElementById('order-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    if (!cart || cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
+    
     const orderData = {
-        name: name.value,
-        email: email.value,
-        phone: phone.value,
-        address: address.value,
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        address: document.getElementById("address").value.trim(),
         items: cart,
         total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + 5
     };
     
     try {
-        const res = await fetch('https://restaurant-backend-0vmh.onrender.com/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("https://restaurant-backend-0vmh.onrender.com/api/orders", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(orderData)
         });
-
-        if (!res.ok) throw new Error("Server error");
-
-        await res.json();
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            console.error("Server error:", data);
+            alert("Failed to place order");
+            return;
+        }
+        
         alert("Order placed successfully!");
-
+        
         cart = [];
-        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem("cart", JSON.stringify(cart));
         renderCart();
-        bootstrap.Modal.getInstance(document.getElementById('placeOrderModal')).hide();
-
-    } catch (err) {
-        console.error(err);
+        
+        const modalElement = document.getElementById("placeOrderModal");
+        if (modalElement) {
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) modal.hide();
+        }
+        
+    } catch (error) {
+        console.error("Fetch error:", error);
         alert("Failed to place order");
     }
 });
