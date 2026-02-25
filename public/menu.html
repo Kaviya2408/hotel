@@ -24,7 +24,7 @@
         
         /* Navigation Mobile */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             padding: 1rem 0;
             position: fixed;
@@ -32,6 +32,7 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
         
         .container {
@@ -61,7 +62,7 @@
         .logo span {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .nav-menu {
@@ -86,7 +87,7 @@
         
         .nav-menu a:hover,
         .nav-menu a.active {
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .cart-link {
@@ -97,7 +98,7 @@
             position: absolute;
             top: -8px;
             right: -8px;
-            background: #ff6b6b;
+            background: #6f4e37;
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -140,7 +141,7 @@
         
         .menu-title {
             font-size: 2rem;
-            color: #ff6b6b;
+            color: #6f4e37;
             margin-bottom: 1rem;
         }
         
@@ -172,9 +173,9 @@
         
         .filter-btn:hover,
         .filter-btn.active {
-            background: #ff6b6b;
+            background: #6f4e37;
             color: white;
-            border-color: #ff6b6b;
+            border-color: #6f4e37;
         }
         
         .menu-grid {
@@ -222,7 +223,7 @@
         .menu-item-price {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ff6b6b;
+            color: #6f4e37;
             white-space: nowrap;
         }
         
@@ -249,7 +250,7 @@
         }
         
         .quantity-btn {
-            background: #ff6b6b;
+            background: #6f4e37;
             color: white;
             border: none;
             width: 30px;
@@ -263,7 +264,7 @@
         }
         
         .quantity-btn:hover {
-            background: #e55555;
+            background: #8b5a3c;
         }
         
         .quantity {
@@ -274,7 +275,7 @@
         }
         
         .add-to-cart-btn {
-            background: #4ecdc4;
+            background: #6f4e37;
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
@@ -287,7 +288,7 @@
         }
         
         .add-to-cart-btn:hover {
-            background: #3db8b0;
+            background: #8b5a3c;
             transform: translateY(-2px);
         }
         
@@ -309,7 +310,7 @@
         .footer-col h4 {
             font-size: 1.2rem;
             margin-bottom: 1rem;
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .footer-col ul {
@@ -327,7 +328,7 @@
         }
         
         .footer-col a:hover {
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .footer-bottom {
@@ -406,251 +407,192 @@
                 font-size: 16px;
             }
         }
-    </style>
-</head>
+        
+        /* Floating Filter Panel */
         .categories-toggle {
-            background: transparent;
-            color: var(--primary-color);
+            background: #6f4e37;
+            color: white;
             border: none;
-            padding: 0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            width: 40px;
-            height: 40px;
-        }
-        .categories-toggle:hover {
-            color: var(--secondary-color);
-            transform: scale(1.1);
-        }
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 98;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .menu-sidebar {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 0 12px 12px 0;
-            box-shadow: var(--shadow-hover);
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: -320px;
-            width: 300px;
-            transition: var(--transition);
-            z-index: 99;
-            overflow-y: auto;
-        }
-        .menu-sidebar.open {
-            left: 0;
-        }
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--bg-color);
-        }
-        .close-sidebar {
-            background: var(--light-gray);
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            color: var(--gray-color);
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .close-sidebar:hover {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-        .menu-sidebar h2 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .categories-toggle:hover {
+            background: #8b5a3c;
+            transform: translateY(-2px);
+        }
+        
+        .filter-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .filter-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .filter-panel-list {
+            list-style: none;
+            padding: 0;
             margin: 0;
         }
-        .category-list {
-            list-style: none;
-        }
-        .category-item {
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 8px;
+        
+        .filter-panel-item {
+            padding: 0.75rem 1rem;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            color: var(--gray-color);
+            transition: background 0.3s ease;
+            border-radius: 8px;
+            color: #333;
             font-weight: 500;
+            margin-bottom: 0.25rem;
         }
-        .category-item:hover,
-        .category-item.active {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
-            transform: translateX(5px);
+        
+        .filter-panel-item:hover,
+        .filter-panel-item.active {
+            background: #6f4e37;
+            color: white;
         }
-        .category-icon {
-            font-size: 1.3rem;
+        
+        .filter-panel-item:last-child {
+            margin-bottom: 0;
         }
+        
+        /* Menu Content */
         .menu-content {
-            padding-bottom: 2rem;
+            padding: 2rem 0;
         }
+        
         .menu-section {
             margin-bottom: 3rem;
         }
+        
         .section-title {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .section-title i {
             font-size: 1.8rem;
+            color: #6f4e37;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #6f4e37;
         }
-        .menu-section {
-            margin-bottom: 3rem;
-            padding-left: 5px;
-        }
+        
         .menu-items {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: 1fr;
             gap: 1.5rem;
         }
+        
         .menu-item-card {
-            background: var(--white);
+            background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
+        
         .menu-item-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
         }
+        
         .item-image {
-            height: 200px;
+            height: 180px;
             overflow: hidden;
-            position: relative;
         }
+        
         .item-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: var(--transition);
         }
-        .menu-item-card:hover .item-image img {
-            transform: scale(1.1);
-        }
-        .item-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--accent-color);
-            color: var(--white);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
+        
         .item-details {
             padding: 1.5rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
         }
+        
         .item-name {
-            font-size: 1.3rem;
-            color: var(--dark-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 0.5rem;
-            font-weight: 700;
         }
+        
         .item-description {
-            color: var(--gray-color);
-            font-size: 0.95rem;
-            line-height: 1.6;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
             margin-bottom: 1rem;
-            flex: 1;
         }
+        
         .item-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-top: 1rem;
-            border-top: 2px solid var(--bg-color);
+            border-top: 1px solid #f0f0f0;
         }
+        
         .item-price {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: #6f4e37;
         }
-        .add-to-cart-btn {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white);
+        
+        .add-item-btn {
+            background: #6f4e37;
+            color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        
+        .add-item-btn:hover {
+            background: #8b5a3c;
+        }
+        
+        .item-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
-        .add-to-cart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-        @media (max-width: 968px) {
-            .menu-header {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-            .menu-title {
-                font-size: 2rem;
-            }
-            .menu-sidebar {
-                width: 280px;
-            }
-        }
-        @media (max-width: 600px) {
+        
+        /* Tablet Responsive */
+        @media (min-width: 768px) {
             .menu-items {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
-            .menu-sidebar {
-                width: 85%;
-            }
-            .menu-container {
-                padding: 1rem;
+        }
+        
+        /* Desktop Responsive */
+        @media (min-width: 1024px) {
+            .menu-items {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
@@ -704,41 +646,22 @@
     <div class="menu-container" id="menuContainer">
         <!-- Menu Header -->
         <div class="menu-header">
-            <button class="categories-toggle" id="categoriesToggle">
-                <i class="fas fa-filter"></i>
-            </button>
+            <div style="position: relative; display: inline-block;">
+                <button class="categories-toggle" id="categoriesToggle">
+                    <i class="fas fa-filter"></i> Filter Categories
+                </button>
+                <div class="filter-panel" id="filterPanel">
+                    <ul class="filter-panel-list">
+                        <li class="filter-panel-item active" data-category="all">All Items</li>
+                        <li class="filter-panel-item" data-category="curry">Curries</li>
+                        <li class="filter-panel-item" data-category="rice">Rice & Biryani</li>
+                        <li class="filter-panel-item" data-category="tandoori">Tandoori</li>
+                        <li class="filter-panel-item" data-category="noodles">Noodles</li>
+                    </ul>
+                </div>
+            </div>
             <h1 class="menu-title">Our Menu</h1>
         </div>
-
-        <!-- Sidebar Overlay -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        <!-- Sidebar -->
-        <aside class="menu-sidebar" id="menuSidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-utensils"></i> Categories</h2>
-                <button class="close-sidebar" id="closeSidebar">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <ul class="category-list">
-                <li class="category-item active" data-category="all">
-                    <span>All Items</span>
-                </li>
-                <li class="category-item" data-category="curry">
-                    <span>Curries</span>
-                </li>
-                <li class="category-item" data-category="rice">
-                    <span>Rice & Biryani</span>
-                </li>
-                <li class="category-item" data-category="tandoori">
-                    <span>Tandoori</span>
-                </li>
-                <li class="category-item" data-category="noodles">
-                    <span>Noodles</span>
-                </li>
-            </ul>
-        </aside>
 
         <!-- Menu Content -->
         <main class="menu-content">
@@ -865,47 +788,38 @@
     </div>
 
     <script>
-        // Sidebar toggle
+        // Floating Filter Panel
         const categoriesToggle = document.getElementById('categoriesToggle');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const menuSidebar = document.getElementById('menuSidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        categoriesToggle.addEventListener('click', () => {
-            menuSidebar.classList.add('open');
-            sidebarOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
+        const filterPanel = document.getElementById('filterPanel');
+        
+        // Toggle filter panel
+        categoriesToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            filterPanel.classList.toggle('active');
         });
-
-        closeSidebar.addEventListener('click', () => {
-            menuSidebar.classList.remove('open');
-            sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = '';
+        
+        // Close filter panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!categoriesToggle.contains(e.target) && !filterPanel.contains(e.target)) {
+                filterPanel.classList.remove('active');
+            }
         });
-
-        // Close sidebar when clicking overlay
-        sidebarOverlay.addEventListener('click', () => {
-            menuSidebar.classList.remove('open');
-            sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        });
-
+        
         // Category filtering
-        const categoryItems = document.querySelectorAll('.category-item');
+        const filterPanelItems = document.querySelectorAll('.filter-panel-item');
         const menuSections = document.querySelectorAll('.menu-section');
 
-        categoryItems.forEach(item => {
-            item.addEventListener('click', () => {
+        filterPanelItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
                 const category = item.dataset.category;
                 
                 // Update active state
-                categoryItems.forEach(cat => cat.classList.remove('active'));
+                filterPanelItems.forEach(panelItem => panelItem.classList.remove('active'));
                 item.classList.add('active');
                 
-                // Close sidebar after selection
-                menuSidebar.classList.remove('open');
-                sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                // Close filter panel after selection
+                filterPanel.classList.remove('active');
                 
                 // Filter sections
                 if (category === 'all') {

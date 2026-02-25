@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Reviews - Delicious Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="logo.png" alt="Restaurant Logo">
+                    <span>Delicious</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="reviews.html" class="active">Reviews</a></li>
+                    <li><a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a></li>
+                </ul>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Reviews Page -->
+    <section class="reviews-page">
+        <div class="container">
+            <!-- Reviews Header -->
+            <div class="reviews-header">
+                <h1 class="reviews-title">Customer Reviews</h1>
+                <p class="reviews-subtitle">Share your dining experience with us</p>
+                <button class="write-review-btn" id="writeReviewBtn">
+                    <i class="fas fa-pen"></i> Write a Review
+                </button>
+            </div>
+
+            <!-- Rating Summary -->
+            <div class="rating-summary">
+                <div class="rating-overview">
+                    <div class="rating-number">4.2</div>
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <div class="rating-count">Based on 8 reviews</div>
+                </div>
+                <div class="rating-bars">
+                    <div class="rating-bar-item">
+                        <div class="rating-bar-label">
+                            <span>5</span>
+                            <i class="fas fa-star" style="color: #ffc107; font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill" style="width: 50%;"></div>
+                        </div>
+                        <div class="rating-bar-percentage">50%</div>
+                    </div>
+                    <div class="rating-bar-item">
+                        <div class="rating-bar-label">
+                            <span>4</span>
+                            <i class="fas fa-star" style="color: #ffc107; font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill" style="width: 25%;"></div>
+                        </div>
+                        <div class="rating-bar-percentage">25%</div>
+                    </div>
+                    <div class="rating-bar-item">
+                        <div class="rating-bar-label">
+                            <span>3</span>
+                            <i class="fas fa-star" style="color: #ffc107; font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill" style="width: 12.5%;"></div>
+                        </div>
+                        <div class="rating-bar-percentage">12.5%</div>
+                    </div>
+                    <div class="rating-bar-item">
+                        <div class="rating-bar-label">
+                            <span>2</span>
+                            <i class="fas fa-star" style="color: #ffc107; font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill" style="width: 12.5%;"></div>
+                        </div>
+                        <div class="rating-bar-percentage">12.5%</div>
+                    </div>
+                    <div class="rating-bar-item">
+                        <div class="rating-bar-label">
+                            <span>1</span>
+                            <i class="fas fa-star" style="color: #ffc107; font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="rating-bar-track">
+                            <div class="rating-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="rating-bar-percentage">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="reviews-list" id="reviewsList">
+                <!-- Reviews will be dynamically loaded here -->
+                <div class="no-reviews">
+                    <div style="text-align: center; padding: 4rem 2rem;">
+                        <i class="fas fa-star" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                        <h3 style="color: #666; margin-bottom: 0.5rem;">No Reviews Yet</h3>
+                        <p style="color: #999;">Be the first to share your experience!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Floating Review Form Overlay -->
+    <div class="floating-form-overlay" id="formOverlay"></div>
+    
+    <!-- Floating Review Form -->
+    <div class="floating-form" id="floatingForm">
+        <div class="form-header">
+            <h3><i class="fas fa-pen"></i> Write a Review</h3>
+            <button class="close-form" id="closeForm">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="reviewForm">
+            <div class="form-group">
+                <label class="form-label">Your Name</label>
+                <input type="text" class="form-input" id="reviewerName" required placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Rating</label>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2"><i class="fas fa-star"></i></label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1"><i class="fas fa-star"></i></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Your Review</label>
+                <textarea class="form-input form-textarea" id="reviewText" required placeholder="Share your experience with us..." style="min-height: 120px;"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Post Review</button>
+        </form>
+    </div>
+
+    <script>
+        // Sample reviews data with realistic ratings
+        const reviewsData = [
+            {
+                id: 1,
+                name: "Sarah Johnson",
+                rating: 5,
+                date: "2024-01-15",
+                text: "Absolutely amazing food! The butter chicken was perfectly cooked and the naan was soft and fresh. The service was impeccable and the ambiance was perfect for our family dinner. Will definitely be coming back!",
+                helpful: 23
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                rating: 4,
+                date: "2024-01-12",
+                text: "Great food and good service. The biryani was flavorful and had generous portions. The only reason I'm not giving 5 stars is that the delivery took a bit longer than expected. Overall, a solid dining experience.",
+                helpful: 15
+            },
+            {
+                id: 3,
+                name: "Emily Rodriguez",
+                rating: 5,
+                date: "2024-01-10",
+                text: "Best Indian restaurant in town! Fresh ingredients, generous portions, and friendly staff. The paneer tikka was exceptional - perfectly marinated and grilled. The prices are reasonable too. Highly recommended!",
+                helpful: 31
+            },
+            {
+                id: 4,
+                name: "David Kim",
+                rating: 3,
+                date: "2024-01-08",
+                text: "The food was decent but nothing extraordinary. The curry was a bit too oily for my taste. Service was okay but could be more attentive. It's an average place, not bad but not great either.",
+                helpful: 8
+            },
+            {
+                id: 5,
+                name: "Jessica Martinez",
+                rating: 5,
+                date: "2024-01-05",
+                text: "Incredible experience from start to finish! The tandoori platter had amazing variety and everything was cooked to perfection. The staff was very knowledgeable about the menu and made great recommendations. Will be our new go-to spot!",
+                helpful: 19
+            },
+            {
+                id: 6,
+                name: "Robert Thompson",
+                rating: 4,
+                date: "2024-01-03",
+                text: "Really good food quality and presentation. The spicy noodles had authentic flavors and good portion size. Minor issue with the billing process but it was resolved quickly. Would recommend for casual dining.",
+                helpful: 12
+            },
+            {
+                id: 7,
+                name: "Lisa Anderson",
+                rating: 2,
+                date: "2024-01-01",
+                text: "Disappointing experience. The food was cold when it arrived and the quality was not up to par with the prices. The service was slow and we had to wait a long time for our order. Probably won't return.",
+                helpful: 5
+            },
+            {
+                id: 8,
+                name: "James Wilson",
+                rating: 5,
+                date: "2023-12-28",
+                text: "Fantastic! The mutton curry was rich and flavorful, exactly like homemade. The staff was very accommodating with our dietary restrictions. Clean restaurant and great atmosphere. Perfect for special occasions!",
+                helpful: 27
+            }
+        ];
+
+        let reviews = [...reviewsData];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - Initializing reviews page...');
+            renderReviews();
+            updateRatingSummary();
+            setupFloatingForm();
+            console.log('Reviews page initialized!');
+        });
+
+        // Render reviews
+        function renderReviews() {
+            const reviewsList = document.getElementById('reviewsList');
+            
+            if (reviews.length === 0) {
+                reviewsList.innerHTML = `
+                    <div class="no-reviews">
+                        <div style="text-align: center; padding: 4rem 2rem;">
+                            <i class="fas fa-star" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                            <h3 style="color: #666; margin-bottom: 0.5rem;">No Reviews Yet</h3>
+                            <p style="color: #999;">Be the first to share your experience!</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                reviewsList.innerHTML = reviews.map(review => `
+                    <div class="review-card" data-rating="${review.rating}">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">${review.name.charAt(0)}</div>
+                                <div class="reviewer-details">
+                                    <h4>${review.name}</h4>
+                                    <div class="review-date">${formatDate(review.date)}</div>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                ${generateStars(review.rating)}
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            ${review.text}
+                        </div>
+                        <div class="review-actions">
+                            <button class="helpful-btn" onclick="markHelpful(${review.id})">
+                                <i class="fas fa-thumbs-up"></i> Helpful
+                            </button>
+                            <span class="helpful-count">${review.helpful} people found this helpful</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Generate star rating HTML
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+            return `${Math.floor(diffDays / 365)} years ago`;
+        }
+
+        // Setup floating form
+        function setupFloatingForm() {
+            const writeReviewBtn = document.getElementById('writeReviewBtn');
+            const formOverlay = document.getElementById('formOverlay');
+            const floatingForm = document.getElementById('floatingForm');
+            const closeForm = document.getElementById('closeForm');
+            const form = document.getElementById('reviewForm');
+
+            console.log('Setting up floating form...');
+            console.log('writeReviewBtn:', writeReviewBtn);
+            console.log('formOverlay:', formOverlay);
+            console.log('floatingForm:', floatingForm);
+
+            // Open form
+            writeReviewBtn.addEventListener('click', function() {
+                console.log('Write Review button clicked!');
+                formOverlay.classList.add('active');
+                floatingForm.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close form
+            function closeFormFunc() {
+                formOverlay.classList.remove('active');
+                floatingForm.classList.remove('active');
+                document.body.style.overflow = '';
+                form.reset();
+            }
+
+            closeForm.addEventListener('click', closeFormFunc);
+            formOverlay.addEventListener('click', closeFormFunc);
+
+            // Prevent form close when clicking inside form
+            floatingForm.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('reviewerName').value.trim();
+                const rating = document.querySelector('input[name="rating"]:checked');
+                const text = document.getElementById('reviewText').value.trim();
+                
+                if (!rating) {
+                    alert('Please select a rating');
+                    return;
+                }
+                
+                const newReview = {
+                    id: reviews.length + 1,
+                    name: name,
+                    rating: parseInt(rating.value),
+                    date: new Date().toISOString().split('T')[0],
+                    text: text,
+                    helpful: 0
+                };
+                
+                reviews.unshift(newReview);
+                renderReviews();
+                closeFormFunc();
+                updateRatingSummary();
+                
+                // Show success message
+                const submitBtn = form.querySelector('.submit-btn');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Review Posted!';
+                submitBtn.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Update rating summary
+        function updateRatingSummary() {
+            const totalReviews = reviews.length;
+            const avgRating = (reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews).toFixed(1);
+            
+            document.querySelector('.rating-number').textContent = avgRating;
+            document.querySelector('.rating-count').textContent = `Based on ${totalReviews} reviews`;
+            
+            // Update rating bars
+            const ratingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+            reviews.forEach(review => {
+                ratingCounts[review.rating]++;
+            });
+            
+            Object.keys(ratingCounts).forEach(rating => {
+                const percentage = (ratingCounts[rating] / totalReviews * 100).toFixed(0);
+                const barFill = document.querySelector(`.rating-bar-item:nth-child(${6 - parseInt(rating)}) .rating-bar-fill`);
+                if (barFill) {
+                    barFill.style.width = `${percentage}%`;
+                    barFill.nextElementSibling.textContent = `${percentage}%`;
+                }
+            });
+        }
+
+        // Mark review as helpful
+        function markHelpful(reviewId) {
+            const review = reviews.find(r => r.id === reviewId);
+            if (review) {
+                review.helpful++;
+                renderReviews();
+            }
+        }
+
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+    </script>
+</body>
+</html>

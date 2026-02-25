@@ -60,7 +60,7 @@
         .logo span {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .nav-menu {
@@ -85,7 +85,7 @@
         
         .nav-menu a:hover,
         .nav-menu a.active {
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .cart-link {
@@ -96,7 +96,7 @@
             position: absolute;
             top: -8px;
             right: -8px;
-            background: #ff6b6b;
+            background: #6f4e37;
             color: white;
             border-radius: 50%;
             width: 20px;
@@ -126,13 +126,18 @@
         
         /* Hero Section Mobile */
         .hero {
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #6f4e37, #8b5a3c);
             padding: 120px 0 60px 0;
             text-align: center;
             color: white;
             min-height: 60vh;
             display: flex;
             align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .hero-content h1 {
@@ -147,9 +152,23 @@
             opacity: 0.9;
         }
         
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-buttons .btn-primary,
+        .hero-buttons .btn-secondary {
+            width: 200px;
+            text-align: center;
+        }
+        
         .btn-primary {
             background: white;
-            color: #ff6b6b;
+            color: #6f4e37;
             padding: 1rem 2rem;
             border: none;
             border-radius: 50px;
@@ -160,6 +179,26 @@
         }
         
         .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            border: 2px solid white;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #6f4e37;
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
@@ -198,8 +237,11 @@
         
         .feature-icon {
             font-size: 3rem;
-            color: #ff6b6b;
             margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .feature-card h3 {
@@ -260,61 +302,41 @@
         .menu-item-price {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
-        /* Testimonials Mobile */
-        .testimonials {
-            padding: 4rem 0;
-            background: #f8f9fa;
-        }
-        
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-        
-        .testimonial-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 1.5rem;
-            color: #666;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #ff6b6b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #6f4e37, #8b5a3c);
             color: white;
-            font-weight: bold;
+            padding: 4rem 0;
+            text-align: center;
         }
         
-        .author-info h4 {
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
             font-size: 1rem;
-            margin-bottom: 0.25rem;
-            color: #333;
+            margin-bottom: 2rem;
+            opacity: 0.9;
         }
         
-        .author-info p {
-            color: #666;
-            font-size: 0.9rem;
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cta-buttons .btn-primary {
+            min-width: 200px;
         }
         
         /* Footer Mobile */
@@ -334,7 +356,7 @@
         .footer-col h4 {
             font-size: 1.2rem;
             margin-bottom: 1rem;
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .footer-col ul {
@@ -352,7 +374,7 @@
         }
         
         .footer-col a:hover {
-            color: #ff6b6b;
+            color: #6f4e37;
         }
         
         .footer-bottom {
@@ -381,15 +403,22 @@
                 font-size: 1.2rem;
             }
             
+            .hero-buttons {
+                flex-direction: row;
+                gap: 1.5rem;
+            }
+            
+            .hero-buttons .btn-primary,
+            .hero-buttons .btn-secondary {
+                width: auto;
+                min-width: 180px;
+            }
+            
             .features-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
             
             .menu-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .testimonials-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             
@@ -438,9 +467,10 @@
                     <span>Delicious</span>
                 </div>
                 <ul class="nav-menu">
-                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="menu.html">Menu</a></li>
                     <li><a href="about.html">About</a></li>
+                    <li><a href="reviews.html">Reviews</a></li>
                     <li><a href="cart.html" class="cart-link"><i class="fas fa-shopping-cart"></i> <span class="cart-count">0</span></a></li>
                 </ul>
                 <div class="nav-actions">
@@ -560,60 +590,6 @@
             </div>
             <div class="section-cta">
                 <a href="menu.html" class="btn-primary">View Full Menu</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2>What Our Guests Say</h2>
-                <p>Real experiences from real people</p>
-            </div>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p>"Absolutely amazing food! The flavors are authentic and the service is impeccable. This is now my favorite restaurant."</p>
-                    <div class="testimonial-author">
-                        <strong>Sarah Johnson</strong>
-                        <span>Food Enthusiast</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p>"The ambiance is perfect for a romantic dinner. The butter chicken is to die for! Highly recommended."</p>
-                    <div class="testimonial-author">
-                        <strong>Michael Chen</strong>
-                        <span>Regular Customer</span>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <div class="stars">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p>"Best Indian restaurant in town! Fresh ingredients, generous portions, and friendly staff. Will definitely come back."</p>
-                    <div class="testimonial-author">
-                        <strong>Emily Rodriguez</strong>
-                        <span>Food Blogger</span>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
