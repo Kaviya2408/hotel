@@ -10,7 +10,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             background: var(--bg-color);
             min-height: 100vh;
         }
@@ -18,43 +18,47 @@
         .admin-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 30px;
+            padding: 1.5rem;
             border-radius: 16px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 1.5rem;
             box-shadow: var(--shadow-hover);
         }
 
         .admin-header h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
             font-weight: 700;
         }
 
         .admin-header p {
             margin: 10px 0 0 0;
             opacity: 0.95;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .orders-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         .orders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 20px;
+            justify-content: center;
         }
 
         .order-card {
             background: var(--white);
             border-radius: 16px;
-            padding: 24px;
+            padding: 1.5rem;
             box-shadow: var(--shadow);
             border-left: 5px solid var(--primary-color);
             transition: var(--transition);
+            flex: 1 1 350px;
+            max-width: 500px;
+            min-width: 300px;
         }
 
         .order-card:hover {
@@ -64,8 +68,10 @@
 
         .order-header {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid var(--bg-color);
@@ -74,21 +80,22 @@
         .order-id {
             font-weight: bold;
             color: var(--primary-color);
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
         }
 
         .order-time {
             color: var(--gray-color);
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             margin-top: 5px;
         }
 
         .status-badge {
             padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
             font-weight: 600;
             text-transform: uppercase;
+            white-space: nowrap;
         }
 
         .status-pending {
@@ -105,15 +112,15 @@
 
         .customer-info {
             background: var(--bg-color);
-            padding: 20px;
+            padding: 1rem;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
         }
 
         .customer-info h3 {
             margin: 0 0 12px 0;
             color: var(--dark-color);
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -122,7 +129,8 @@
         .customer-info p {
             margin: 8px 0;
             color: var(--gray-color);
-            font-size: 0.95rem;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            word-break: break-word;
         }
 
         .customer-info strong {
@@ -139,7 +147,7 @@
         .order-items h4 {
             margin: 0 0 15px 0;
             color: var(--dark-color);
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -147,8 +155,10 @@
 
         .item {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
+            gap: 8px;
             padding: 12px 0;
             border-bottom: 1px solid var(--bg-color);
         }
@@ -158,22 +168,24 @@
         }
 
         .item-name {
-            flex: 1;
+            flex: 1 1 150px;
             color: var(--dark-color);
             font-weight: 500;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
         }
 
         .item-quantity {
             color: var(--gray-color);
-            font-size: 0.9rem;
-            margin: 0 15px;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            flex: 0 0 auto;
         }
 
         .item-price {
             font-weight: bold;
             color: var(--primary-color);
-            min-width: 80px;
             text-align: right;
+            flex: 0 0 auto;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .order-total {
@@ -182,13 +194,13 @@
             padding: 15px 20px;
             border-radius: 12px;
             text-align: right;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             font-weight: bold;
         }
 
         .no-orders {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             background: var(--white);
             border-radius: 16px;
             box-shadow: var(--shadow);
@@ -196,18 +208,18 @@
 
         .no-orders h3 {
             color: var(--dark-color);
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             margin-bottom: 10px;
         }
 
         .no-orders p {
             color: var(--gray-color);
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .loading-state {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             background: var(--white);
             border-radius: 16px;
             box-shadow: var(--shadow);
@@ -231,10 +243,12 @@
         .loading-state h3 {
             color: var(--dark-color);
             margin-bottom: 10px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
         }
 
         .loading-state p {
             color: var(--gray-color);
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .refresh-btn {
@@ -244,7 +258,7 @@
             padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2vw, 1rem);
             font-weight: 600;
             margin-top: 20px;
             transition: var(--transition);
@@ -255,107 +269,47 @@
             box-shadow: var(--shadow-hover);
         }
 
-        .filter-section {
-            background: var(--white);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            margin-bottom: 30px;
-        }
-
-        .filter-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .filter-container label {
-            font-weight: 600;
-            color: var(--dark-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .filter-container select {
-            padding: 10px 15px;
-            border: 2px solid var(--bg-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            background: var(--white);
-            color: var(--dark-color);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .filter-container select:hover {
-            border-color: var(--primary-color);
-        }
-
-        .filter-container select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(179, 157, 219, 0.1);
-        }
-
-        .orders-count {
-            margin-left: auto;
-            padding: 10px 15px;
-            background: var(--bg-color);
-            border-radius: 8px;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-
-        .delivery-btn {
-            background: linear-gradient(135deg, #4caf50, #45a049);
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-transform: uppercase;
-        }
-
-        .delivery-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-        }
-
-        .delivery-btn:active {
-            transform: translateY(0);
-        }
-
-        .delivery-btn i {
-            font-size: 0.85rem;
-        }
-
-        .status-delivered {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-            border: 1px solid #4caf50;
-        }
-
         @media (max-width: 768px) {
-            .orders-grid {
-                grid-template-columns: 1fr;
+            body {
+                padding: 10px;
             }
-            
-            .filter-container {
+
+            .orders-grid {
                 flex-direction: column;
                 align-items: stretch;
             }
             
-            .orders-count {
-                margin-left: 0;
-                text-align: center;
+            .order-card {
+                max-width: 100%;
+                min-width: 100%;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-price {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-header {
+                padding: 1rem;
+            }
+
+            .order-card {
+                padding: 1rem;
+            }
+
+            .customer-info {
+                padding: 0.75rem;
             }
         }
     </style>

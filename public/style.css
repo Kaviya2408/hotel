@@ -147,6 +147,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 100%;
 }
 
 img {
@@ -230,22 +231,23 @@ a {
 
 .cart-link {
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
 }
 
 .cart-count {
-    position: absolute;
-    top: -8px;
-    right: -10px;
     background: var(--accent-color);
     color: var(--white);
     border-radius: 50%;
-    width: 20px;
+    min-width: 20px;
     height: 20px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 0.75rem;
     font-weight: 700;
+    padding: 0 6px;
 }
 
 .nav-actions {
@@ -417,12 +419,14 @@ a {
 
 /* Hero Section */
 .hero {
-    height: 600px;
+    height: auto;
+    min-height: 500px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     position: relative;
     display: flex;
     align-items: center;
     overflow: hidden;
+    padding: 80px 0;
 }
 
 .hero::before {
@@ -453,14 +457,14 @@ a {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 5vw, 3.5rem);
     font-weight: 700;
     margin-bottom: 1rem;
     animation: fadeInUp 0.8s ease;
 }
 
 .hero-subtitle {
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
     margin-bottom: 2rem;
     opacity: 0.95;
     animation: fadeInUp 0.8s ease 0.2s backwards;
@@ -528,13 +532,14 @@ a {
 }
 
 .feature-card h3 {
-    font-size: 1.3rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
     margin-bottom: 0.5rem;
     color: var(--dark-color);
 }
 
 .feature-card p {
     color: var(--gray-color);
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 /* Section Header */
@@ -544,13 +549,13 @@ a {
 }
 
 .section-header h2 {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
     color: var(--dark-color);
     margin-bottom: 0.5rem;
 }
 
 .section-header p {
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2vw, 1.1rem);
     color: var(--gray-color);
 }
 
@@ -617,7 +622,7 @@ a {
 }
 
 .dish-content h3 {
-    font-size: 1.4rem;
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
     margin-bottom: 0.5rem;
     color: var(--dark-color);
 }
@@ -625,16 +630,19 @@ a {
 .dish-content p {
     color: var(--gray-color);
     margin-bottom: 1rem;
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .dish-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .price {
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
     font-weight: 700;
     color: var(--primary-color);
 }
@@ -1216,9 +1224,64 @@ a {
 }
 
 /* Responsive Design */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+
+    .hero {
+        min-height: 450px;
+        padding: 60px 0;
+    }
+
+    .features-grid,
+    .dishes-grid,
+    .testimonials-grid {
+        gap: 1.5rem;
+    }
+
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    .hero {
+        min-height: 450px;
+        padding: 60px 0;
+    }
+
+    .features-grid,
+    .dishes-grid,
+    .testimonials-grid {
+        gap: 1.5rem;
+    }
+
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+        min-width: 260px;
+    }
+}
+
 @media (max-width: 768px) {
     body {
         padding-top: 70px;
+    }
+
+    .container {
+        padding: 0 15px;
     }
 
     .nav-wrapper {
@@ -1247,6 +1310,7 @@ a {
         z-index: 999;
         max-height: calc(100vh - 70px);
         overflow-y: auto;
+        display: flex !important;
     }
 
     .nav-menu.active {
@@ -1281,17 +1345,8 @@ a {
     }
 
     .hero {
-        height: auto;
-        min-height: 500px;
-        padding: 60px 0;
-    }
-
-    .hero-title {
-        font-size: 2rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1rem;
+        min-height: 400px;
+        padding: 50px 0;
     }
 
     .hero-buttons {
@@ -1306,14 +1361,6 @@ a {
         max-width: 300px;
     }
 
-    .section-header h2 {
-        font-size: 1.8rem;
-    }
-
-    .section-header p {
-        font-size: 1rem;
-    }
-
     .features-grid,
     .dishes-grid,
     .testimonials-grid {
@@ -1326,6 +1373,7 @@ a {
     .testimonial-card {
         max-width: 100%;
         width: 100%;
+        flex: 1 1 100%;
     }
 
     .footer-grid {
@@ -1353,7 +1401,141 @@ a {
     }
 
     .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 95%;
+        max-width: 95%;
+    }
+
+    .booking-form {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    body {
+        padding-top: 60px;
+    }
+
+    .navbar {
+        padding: 0.75rem 0;
+    }
+
+    .nav-menu {
+        top: 60px;
+    }
+
+    .logo span {
+        font-size: 1.2rem;
+    }
+
+    .logo img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .hero {
+        min-height: 350px;
+        padding: 40px 0;
+    }
+
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary {
+        max-width: 100%;
+        padding: 12px 24px;
+    }
+
+    .features,
+    .popular-dishes,
+    .testimonials {
+        padding: 40px 0;
+    }
+
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        padding: 1.5rem;
+    }
+
+    .dish-footer {
         flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-add-cart {
+        width: 100%;
+    }
+
+    .footer {
+        padding: 40px 0 20px;
+    }
+
+    .footer-col {
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 0;
+    }
+
+    .modal-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .booking-form {
+        padding: 1rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .container {
+        padding: 0 8px;
+    }
+
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        padding: 1rem;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-outline {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .cta-buttons .btn-primary {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
     }
 
     .modal-content {
@@ -1862,5 +2044,531 @@ a {
     
     .review-header {
         align-items: center;
+    }
+}
+
+
+/* ============================================= */
+/* COMPREHENSIVE RESPONSIVE DESIGN FOR ALL PAGES */
+/* ============================================= */
+
+/* Large Desktop (1440px+) - Optimal viewing */
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+    }
+    
+    .features-grid,
+    .dishes-grid,
+    .testimonials-grid {
+        gap: 2.5rem;
+    }
+}
+
+/* Desktop (1200px - 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px) {
+    .container {
+        max-width: 1140px;
+        padding: 0 20px;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(33.333% - 2rem);
+        max-width: calc(33.333% - 2rem);
+    }
+}
+
+/* Laptop (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .container {
+        max-width: 960px;
+        padding: 0 20px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+    }
+    
+    .nav-menu {
+        gap: 1.5rem;
+    }
+}
+
+/* Small Laptop / Large Tablet (900px - 1023px) */
+@media (min-width: 900px) and (max-width: 1023px) {
+    .container {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+    
+    .hero {
+        min-height: 450px;
+        padding: 60px 0;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+        min-width: 280px;
+    }
+    
+    .nav-menu {
+        gap: 1.2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablet Portrait (768px - 899px) */
+@media (min-width: 768px) and (max-width: 899px) {
+    .container {
+        padding: 0 20px;
+    }
+    
+    .hero {
+        min-height: 420px;
+        padding: 50px 0;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+        min-width: 260px;
+    }
+    
+    .features,
+    .popular-dishes,
+    .testimonials {
+        padding: 60px 0;
+    }
+}
+
+/* Mobile Landscape / Small Tablet (600px - 767px) */
+@media (min-width: 600px) and (max-width: 767px) {
+    body {
+        padding-top: 70px;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .hero {
+        min-height: 380px;
+        padding: 40px 0;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .features,
+    .popular-dishes,
+    .testimonials {
+        padding: 50px 0;
+    }
+    
+    .nav-menu {
+        display: flex !important;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+}
+
+/* Mobile Portrait (480px - 599px) */
+@media (min-width: 480px) and (max-width: 599px) {
+    body {
+        padding-top: 65px;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .navbar {
+        padding: 0.75rem 0;
+    }
+    
+    .nav-menu {
+        top: 65px;
+        display: flex !important;
+    }
+    
+    .logo span {
+        font-size: 1.2rem;
+    }
+    
+    .logo img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .hero {
+        min-height: 350px;
+        padding: 40px 0;
+    }
+    
+    .hero-title {
+        font-size: 1.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary {
+        max-width: 100%;
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+    
+    .features,
+    .popular-dishes,
+    .testimonials {
+        padding: 40px 0;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        padding: 1.5rem;
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .dish-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .btn-add-cart {
+        width: 100%;
+    }
+    
+    .footer {
+        padding: 40px 0 20px;
+    }
+    
+    .footer-col {
+        margin-bottom: 1.5rem;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 0;
+    }
+    
+    .modal-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .booking-form {
+        padding: 1rem;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Small Mobile (360px - 479px) */
+@media (min-width: 360px) and (max-width: 479px) {
+    body {
+        padding-top: 60px;
+    }
+    
+    .container {
+        padding: 0 12px;
+    }
+    
+    .navbar {
+        padding: 0.7rem 0;
+    }
+    
+    .nav-menu {
+        top: 60px;
+        display: flex !important;
+    }
+    
+    .logo span {
+        font-size: 1.1rem;
+    }
+    
+    .logo img {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .hero {
+        min-height: 320px;
+        padding: 35px 0;
+    }
+    
+    .hero-title {
+        font-size: 1.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.85rem;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        padding: 1.2rem;
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-outline {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .features,
+    .popular-dishes,
+    .testimonials {
+        padding: 35px 0;
+    }
+    
+    .section-header h2 {
+        font-size: 1.4rem;
+    }
+    
+    .footer {
+        padding: 35px 0 15px;
+    }
+}
+
+/* Extra Small Mobile (320px - 359px) */
+@media (max-width: 359px) {
+    body {
+        padding-top: 60px;
+    }
+    
+    .container {
+        padding: 0 10px;
+    }
+    
+    .navbar {
+        padding: 0.6rem 0;
+    }
+    
+    .nav-menu {
+        top: 60px;
+        display: flex !important;
+    }
+    
+    .logo span {
+        font-size: 1rem;
+    }
+    
+    .logo img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .hero {
+        min-height: 300px;
+        padding: 30px 0;
+    }
+    
+    .hero-title {
+        font-size: 1.3rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        padding: 1rem;
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-outline {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .features,
+    .popular-dishes,
+    .testimonials {
+        padding: 30px 0;
+    }
+    
+    .section-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .footer {
+        padding: 30px 0 15px;
+    }
+}
+
+/* Admin Panel Responsive */
+@media (max-width: 1024px) {
+    .order-card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+        min-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .order-card {
+        flex: 1 1 100%;
+        max-width: 100%;
+        min-width: 100%;
+    }
+    
+    .orders-grid {
+        gap: 15px;
+    }
+    
+    body {
+        padding: 10px;
+    }
+    
+    .admin-header {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .order-card {
+        padding: 1.2rem;
+    }
+    
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .status-badge {
+        align-self: flex-start;
+    }
+}
+
+/* Ensure mobile menu works on all pages */
+@media (max-width: 768px) {
+    .nav-menu {
+        position: fixed !important;
+        left: -100% !important;
+        top: 70px !important;
+        flex-direction: column !important;
+        background: var(--white) !important;
+        width: 100% !important;
+        text-align: center !important;
+        transition: left 0.3s ease-in-out !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+        padding: 2rem 0 !important;
+        z-index: 999 !important;
+        max-height: calc(100vh - 70px) !important;
+        overflow-y: auto !important;
+        display: flex !important;
+    }
+    
+    .nav-menu.active {
+        left: 0 !important;
+    }
+}
+
+/* Fix for minimized laptop screens (zoom or small laptop) */
+@media (min-width: 769px) and (max-width: 1366px) {
+    .container {
+        max-width: 100%;
+        padding: 0 20px;
+    }
+    
+    .hero {
+        min-height: 450px;
+    }
+    
+    .feature-card,
+    .dish-card,
+    .testimonial-card {
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+        min-width: 280px;
+    }
+    
+    .nav-menu {
+        gap: 1.2rem;
+        font-size: 0.95rem;
+    }
+    
+    .order-card {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1600px;
     }
 }
