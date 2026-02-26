@@ -343,6 +343,9 @@ a {
     background: none;
     border: none;
     cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+    position: relative;
 }
 
 .menu-toggle span {
@@ -350,6 +353,19 @@ a {
     height: 3px;
     background: var(--dark-color);
     transition: var(--transition);
+    display: block;
+}
+
+.menu-toggle.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
 }
 
 /* Buttons */
@@ -1204,6 +1220,13 @@ a {
         position: relative;
     }
 
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+
     .nav-menu {
         position: fixed;
         left: -100%;
@@ -1212,14 +1235,27 @@ a {
         background: var(--white);
         width: 100%;
         text-align: center;
-        transition: var(--transition);
+        transition: left 0.3s ease;
         box-shadow: var(--shadow);
         padding: 2rem 0;
         z-index: 999;
+        height: calc(100vh - 70px);
+        overflow-y: auto;
     }
 
     .nav-menu.active {
         left: 0;
+    }
+
+    .nav-menu li {
+        width: 100%;
+        padding: 0.5rem 0;
+    }
+
+    .nav-menu a {
+        display: block;
+        padding: 1rem;
+        font-size: 1.1rem;
     }
 
     .nav-actions {
@@ -1228,6 +1264,7 @@ a {
 
     .menu-toggle {
         display: flex;
+        z-index: 1001;
     }
 
     .user-menu .user-dropdown {

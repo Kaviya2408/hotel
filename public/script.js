@@ -68,18 +68,32 @@ function updateAuthButtons() {
 const menuToggle = document.getElementById('menuToggle');
 const navMenu = document.querySelector('.nav-menu');
 
-if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
+if (menuToggle && navMenu) {
+    menuToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Menu toggle clicked!');
         navMenu.classList.toggle('active');
         menuToggle.classList.toggle('active');
+    });
+
+    // Close menu when clicking on a link
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            navMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        });
     });
 }
 
 // Close menu when clicking outside
 document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-wrapper')) {
-        navMenu?.classList.remove('active');
-        menuToggle?.classList.remove('active');
+    if (navMenu && menuToggle) {
+        if (!e.target.closest('.nav-wrapper')) {
+            navMenu.classList.remove('active');
+            menuToggle.classList.remove('active');
+        }
     }
 });
 
