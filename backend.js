@@ -7,23 +7,15 @@ const path = require('path');
 
 const app = express();
 
-/* -------------------- MIDDLEWARE -------------------- */
-
-// CORS
 app.use(cors({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type']
 }));
 
-// JSON parser
 app.use(express.json());
 
-// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-/* -------------------- MONGODB -------------------- */
 
 const mongoURI = process.env.MONGO_URI;
 
@@ -39,9 +31,6 @@ mongoose.connect(mongoURI)
         process.exit(1);
     });
 
-
-/* -------------------- ORDER MODEL -------------------- */
-
 const orderSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -55,8 +44,6 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
-/* -------------------- REVIEW MODEL -------------------- */
-
 const reviewSchema = new mongoose.Schema({
     name: { type: String, required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
@@ -68,10 +55,6 @@ const reviewSchema = new mongoose.Schema({
 
 const Review = mongoose.model('Review', reviewSchema);
 
-
-/* -------------------- ROUTES -------------------- */
-
-// Serve frontend pages
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -84,7 +67,18 @@ app.get('/api/test', (req, res) => {
     });
 });
 
-// ✅ CREATE ORDER
+// Firebase config endpoint (secure)
+app.get('/api/firebase-config', (req, res) => {
+    res.json({
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+        appId: process.env.FIREBASE_APP_ID
+    });
+});
+
 app.post('/api/orders', async (req, res) => {
     try {
         const { name, email, phone, address, items, total } = req.body;
@@ -193,7 +187,7 @@ app.post('/api/reviews', async (req, res) => {
     }
 });
 
-// ✅ GET ALL REVIEWS
+// ✅ GET ALL REVIEWS. for ascending we can use 1
 app.get('/api/reviews', async (req, res) => {
     try {
         const reviews = await Review.find().sort({ created_at: -1 });
