@@ -1,8 +1,0 @@
-node_modules/
-*.class
-*.db
-*.jar
-uploads/
-serviceAccountKey.json
-.env
-.DS_Store
