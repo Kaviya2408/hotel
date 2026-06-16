@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Admin - Orders Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background: var(--bg-color);
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .admin-header h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+        }
+
+        .admin-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.95;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .filter-section {
+            max-width: 1400px;
+            margin: 0 auto 2rem auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-toggle {
+            background: #6f4e37;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(111, 78, 55, 0.3);
+        }
+        
+        .filter-toggle:hover {
+            background: #8b5a3c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(111, 78, 55, 0.4);
+        }
+        
+        .filter-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        .filter-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Style for select dropdown */
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+    background: var(--white);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+        
+        .filter-option {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+        
+        .filter-option:last-child {
+            border-bottom: none;
+        }
+        
+        .filter-option:hover {
+            background: #f8f9fa;
+            color: #6f4e37;
+        }
+        
+        .filter-option.active {
+            background: #6f4e37;
+            color: white;
+            font-weight: 600;
+        }
+
+        .orders-count {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            white-space: nowrap;
+        }
+
+        .orders-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .orders-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .order-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+            flex: 1 1 350px;
+            max-width: 500px;
+            min-width: 300px;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .order-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--bg-color);
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+
+        .order-time {
+            color: var(--gray-color);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: rgba(179, 157, 219, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .status-delivered {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .customer-info {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .customer-info h3 {
+            margin: 0 0 12px 0;
+            color: var(--dark-color);
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .customer-info p {
+            margin: 8px 0;
+            color: var(--gray-color);
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            word-break: break-word;
+        }
+
+        .customer-info strong {
+            color: var(--dark-color);
+        }
+
+        .order-items {
+            background: var(--white);
+            padding: 0;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .order-items h4 {
+            margin: 0 0 15px 0;
+            color: var(--dark-color);
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .item {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--bg-color);
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            flex: 1 1 150px;
+            color: var(--dark-color);
+            font-weight: 500;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+        }
+
+        .item-quantity {
+            color: var(--gray-color);
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            flex: 0 0 auto;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: var(--primary-color);
+            text-align: right;
+            flex: 0 0 auto;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .order-total {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-align: right;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            font-weight: bold;
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .no-orders h3 {
+            color: var(--dark-color);
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+            margin-bottom: 10px;
+        }
+
+        .no-orders p {
+            color: var(--gray-color);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--bg-color);
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-state h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+        }
+
+        .loading-state p {
+            color: var(--gray-color);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            font-weight: 600;
+            margin-top: 20px;
+            transition: var(--transition);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .filter-container label {
+                justify-content: center;
+            }
+
+            .filter-container select {
+                width: 100%;
+            }
+
+            .orders-count {
+                text-align: center;
+            }
+
+            .orders-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .order-card {
+                max-width: 100%;
+                min-width: 100%;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item-price {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-header {
+                padding: 1rem;
+            }
+
+            .filter-section {
+                padding: 0 10px;
+            }
+
+            .filter-container {
+                padding: 1rem;
+            }
+
+            .order-card {
+                padding: 1rem;
+            }
+
+            .customer-info {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Delivery Button Styles */
+        .delivery-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .delivery-btn:hover {
+            background: linear-gradient(135deg, #229954, #27ae60);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        /* Quick Links Section */
+        .quick-links {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .quick-link-btn {
+            background: white;
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quick-link-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-header">
+        <h1>🍽️ Restaurant Admin Dashboard</h1>
+        <p>Today's Orders: <span id="todayOrderCount">0</span></p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+        <a href="add-product.html" class="quick-link-btn">
+            <i class="fas fa-utensils"></i> Manage Menu Items
+        </a>
+        <a href="menu.html" class="quick-link-btn">
+            <i class="fas fa-book-open"></i> View Menu
+        </a>
+        <a href="reviews.html" class="quick-link-btn">
+            <i class="fas fa-star"></i> Customer Reviews
+        </a>
+    </div>
+
+    <div class="filter-section">
+        <div style="position: relative; display: inline-block;">
+            <button class="filter-toggle" id="filterToggle">
+                <i class="fas fa-filter"></i> Filter by Date
+            </button>
+            <div class="filter-dropdown" id="filterDropdown">
+                <div class="filter-option active" data-filter="today">Today Only</div>
+                <div class="filter-option" data-filter="yesterday">Yesterday</div>
+                <div class="filter-option" data-filter="week">Last 7 Days</div>
+                <div class="filter-option" data-filter="month">Last 30 Days</div>
+                <div class="filter-option" data-filter="all">All Orders</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="orders-container" id="orders-container">
+        <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <h3>Loading orders...</h3>
+            <p>Please wait while we fetch the latest orders.</p>
+        </div>
+    </div>
+
+    <script>
+    // Check admin access first
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const userRole = localStorage.getItem('userRole');
+    const isAdmin = isLoggedIn && userRole === 'admin';
+    
+    console.log('Admin dashboard - Access check:', { isLoggedIn, userRole, isAdmin });
+    
+    if (!isAdmin) {
+        // Redirect non-admin users to home page
+        alert('Access denied. Admin privileges required.');
+        window.location.href = 'index.html';
+    }
+    
+    const backendUrl = 'https://restaurant-backend-0vmh.onrender.com';
+    let allOrders = [];
+    let currentFilter = 'today';
+
+    // Filter dropdown toggle
+    const filterToggle = document.getElementById('filterToggle');
+    const filterDropdown = document.getElementById('filterDropdown');
+    
+    filterToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        filterDropdown.classList.toggle('show');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        filterDropdown.classList.remove('show');
+    });
+    
+    // Handle filter option clicks
+    document.querySelectorAll('.filter-option').forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const filterValue = option.dataset.filter;
+            currentFilter = filterValue;
+            
+            // Update active state
+            document.querySelectorAll('.filter-option').forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+            
+            // Update button text
+            filterToggle.innerHTML = `<i class="fas fa-filter"></i> ${option.textContent}`;
+            
+            // Close dropdown and filter orders
+            filterDropdown.classList.remove('show');
+            filterOrders();
+        });
+    });
+
+    // Function to check if a date is today
+    function isToday(dateString) {
+        if (!dateString) return false;
+        const orderDate = new Date(dateString);
+        const today = new Date();
+        
+        return orderDate.getDate() === today.getDate() &&
+               orderDate.getMonth() === today.getMonth() &&
+               orderDate.getFullYear() === today.getFullYear();
+    }
+
+    // Function to check if a date is yesterday
+    function isYesterday(dateString) {
+        if (!dateString) return false;
+        const orderDate = new Date(dateString);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        return orderDate.getDate() === yesterday.getDate() &&
+               orderDate.getMonth() === yesterday.getMonth() &&
+               orderDate.getFullYear() === yesterday.getFullYear();
+    }
+
+    // Function to check if date is within last N days
+    function isWithinDays(dateString, days) {
+        if (!dateString) return false;
+        const orderDate = new Date(dateString);
+        const now = new Date();
+        const diffTime = Math.abs(now - orderDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays <= days;
+    }
+
+    // Function to filter orders based on selected filter
+    function filterOrders() {
+        const filterValue = currentFilter;
+        
+        let filteredOrders = [];
+        
+        switch(filterValue) {
+            case 'today':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isToday(orderDate);
+                });
+                break;
+            case 'yesterday':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isYesterday(orderDate);
+                });
+                break;
+            case 'week':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isWithinDays(orderDate, 7);
+                });
+                break;
+            case 'month':
+                filteredOrders = allOrders.filter(order => {
+                    const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+                    return isWithinDays(orderDate, 30);
+                });
+                break;
+            case 'all':
+                filteredOrders = allOrders;
+                break;
+        }
+        
+        displayOrders(filteredOrders);
+        updateOrdersCount(filteredOrders.length);
+    }
+
+    // Function to update orders count display
+    function updateOrdersCount(count) {
+        const countElement = document.querySelector('.orders-count');
+        if (countElement) {
+            countElement.textContent = `Showing ${count} order${count !== 1 ? 's' : ''}`;
+        }
+        
+        // Update today's order count in header
+        const todayOrders = allOrders.filter(order => {
+            const orderDate = order.created_at || order.timestamp || order.date || order.orderDate;
+            return isToday(orderDate);
+        });
+        document.getElementById('todayOrderCount').textContent = todayOrders.length;
+    }
+
+    // Function to display orders
+    function displayOrders(orders) {
+        const container = document.getElementById('orders-container');
+        container.innerHTML = ''; // Clear previous orders
+
+        if (orders.length === 0) {
+            let message = '';
+            switch(currentFilter) {
+                case 'today':
+                    message = 'No orders today';
+                    break;
+                case 'yesterday':
+                    message = 'No orders yesterday';
+                    break;
+                case 'week':
+                    message = 'No orders in the last 7 days';
+                    break;
+                case 'month':
+                    message = 'No orders in the last 30 days';
+                    break;
+                case 'all':
+                    message = 'No orders found';
+                    break;
+            }
+            
+            container.innerHTML = `
+                <div class="no-orders">
+                    <h3>${message}</h3>
+                    <p>Orders will appear here when customers place them.</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">Total orders in system: ${allOrders.length}</p>
+                </div>
+            `;
+            return;
+        }
+
+        const ordersGrid = document.createElement('div');
+        ordersGrid.className = 'orders-grid';
+
+        orders.forEach((order, index) => {
+            const orderCard = document.createElement('div');
+            orderCard.className = 'order-card';
+            
+            const uniqueOrderId = order._id;
+            console.log('📍 Displaying order with ID:', uniqueOrderId, 'at index:', index);
+            
+            // Handle different order formats
+            const orderTime = order.created_at || order.timestamp || order.date || order.orderDate || new Date().toISOString();
+            const orderItems = order.items || order.cart || [];
+            const orderTotal = order.total || order.totalAmount || '0';
+            
+            orderCard.innerHTML = `
+                <div class="order-header">
+                    <div>
+                        <div class="order-id">Order #${index + 1}</div>
+                        <div class="order-time">${new Date(orderTime).toLocaleString()}</div>
+                    </div>
+                    ${(order.status === 'pending' || !order.status) ? `
+                        <button class="delivery-btn" onclick="markAsDelivered('${uniqueOrderId}')">
+                            <i class="fas fa-check-circle"></i>
+                            Mark as Delivered
+                        </button>
+                    ` : `
+                        <span class="status-badge status-${order.status || 'pending'}">${order.status || 'pending'}</span>
+                    `}
+                </div>
+                
+                <div class="customer-info">
+                    <h3>👤 Customer Information</h3>
+                    <p><strong>Name:</strong> ${order.name || order.customerName || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${order.email || order.customerEmail || 'N/A'}</p>
+                    <p><strong>Phone:</strong> ${order.phone || order.phoneNumber || 'N/A'}</p>
+                    <p><strong>Address:</strong> ${order.address || order.deliveryAddress || 'N/A'}</p>
+                </div>
+                
+                <div class="order-items">
+                    <h4>🛒 Order Items</h4>
+                    ${orderItems.length > 0 ? orderItems.map(item => `
+                        <div class="item">
+                            <span class="item-name">${item.name || item.dishName || 'Item'}</span>
+                            <span class="item-quantity">x${item.qty || item.quantity || 1}</span>
+                            <span class="item-price">₹${item.price || item.totalPrice || '0'}</span>
+                        </div>
+                    `).join('') : '<p>No items</p>'}
+                </div>
+                
+                <div class="order-total">
+                    <strong>Total: ₹${orderTotal}</strong>
+                </div>
+            `;
+            ordersGrid.appendChild(orderCard);
+        });
+
+        container.appendChild(ordersGrid);
+    }
+
+    // Function to mark order as delivered and delete it
+    async function markAsDelivered(orderId) {
+        try {
+            console.log('🔄 Starting delivery process for order:', orderId);
+            
+            // Show confirmation dialog
+            const confirmed = confirm('Are you sure you want to mark this order as delivered? It will be automatically removed from the system.');
+            if (!confirmed) {
+                console.log('❌ User cancelled delivery action');
+                return;
+            }
+
+            // Find the order in allOrders array
+            const targetOrder = allOrders.find(order => order._id === orderId);
+            
+            if (!targetOrder) {
+                console.error('❌ Order not found in allOrders array:', orderId);
+                console.error('❌ Available order IDs:', allOrders.map(o => o._id));
+                alert('Order not found. Please refresh page.');
+                return;
+            }
+            
+            console.log('📍 Found order to delete:', orderId, targetOrder);
+
+            // Update status to delivered
+            try {
+                console.log('🌐 Attempting backend update for order:', orderId);
+                
+                const updateResponse = await fetch(`${backendUrl}/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'delivered' })
+                });
+
+                console.log('📝 Backend update response status:', updateResponse.status);
+
+                if (updateResponse.ok) {
+                    console.log('✅ Status updated successfully, now deleting order');
+                    
+                    // Delete the order
+                    const deleteResponse = await fetch(`${backendUrl}/api/orders/${orderId}`, {
+                        method: 'DELETE'
+                    });
+
+                    console.log('🗑️ Backend delete response status:', deleteResponse.status);
+
+                    if (deleteResponse.ok) {
+                        console.log(`✅ Order ${orderId} marked as delivered and deleted from backend`);
+                        
+                        // Remove from local array
+                        const indexToRemove = allOrders.findIndex(order => order._id === orderId);
+                        
+                        if (indexToRemove !== -1) {
+                            allOrders.splice(indexToRemove, 1);
+                            console.log('🔄 Removed order from local array at index:', indexToRemove);
+                        }
+                        
+                        // Refresh orders list
+                        filterOrders();
+                        return;
+                    } else {
+                        console.error('❌ Backend delete failed:', deleteResponse.statusText);
+                        alert('Failed to delete order. Please try again.');
+                    }
+                } else {
+                    console.error('❌ Backend update failed:', updateResponse.statusText);
+                    alert('Failed to update order status. Please try again.');
+                }
+            } catch (backendError) {
+                console.error('❌ Backend error:', backendError);
+                alert('Backend connection error. Please check your connection.');
+            }
+
+        } catch (err) {
+            console.error('❌ Error marking order as delivered:', err);
+            alert('Error marking order as delivered: ' + err.message);
+        }
+    }
+
+    async function fetchOrders() {
+        try {
+            console.log('🔄 Fetching orders from backend...');
+            console.log('🌐 Backend URL:', backendUrl);
+            
+            // Fetch from backend only
+            const response = await fetch(`${backendUrl}/api/orders`);
+            
+            console.log('📡 Response status:', response.status);
+            console.log('📡 Response ok:', response.ok);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const orders = await response.json();
+            console.log('📦 Raw orders from backend:', orders);
+            
+            allOrders = orders;
+            
+            console.log('✅ Orders fetched from backend:', allOrders.length);
+            console.log('All orders:', allOrders);
+
+            // Apply current filter
+            filterOrders();
+
+        } catch (err) {
+            console.error('❌ Error fetching orders:', err);
+            console.error('❌ Full error details:', err.stack);
+            const container = document.getElementById('orders-container');
+            container.innerHTML = `
+                <div class="no-orders">
+                    <h3>Error loading orders</h3>
+                    <p>Please check your internet connection and try again.</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">${err.message}</p>
+                    <p style="font-size: 0.8rem; margin-top: 1rem;">Backend URL: ${backendUrl}</p>
+                    <button class="refresh-btn" onclick="fetchOrders()">
+                        <i class="fas fa-sync"></i> Retry
+                    </button>
+                </div>
+            `;
+            document.getElementById('todayOrderCount').textContent = '0';
+            updateOrdersCount(0);
+        }
+    }
+
+    // Fetch immediately on page load
+    fetchOrders();
+
+    // Auto-refresh every 5 seconds
+    setInterval(fetchOrders, 5000);
+// Add product form handling
+document.getElementById('addProductForm')?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('productName').value.trim();
+    const description = document.getElementById('productDescription').value.trim();
+    const price = parseFloat(document.getElementById('productPrice').value);
+    const imageUrl = document.getElementById('productImage').value.trim();
+    try {
+        const res = await fetch(`${backendUrl}/api/products`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description, price, imageUrl })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            alert('Product added successfully!');
+            document.getElementById('addProductForm').reset();
+        } else {
+            alert('Failed to add product: ' + (data.error || 'Unknown error'));
+        }
+    } catch (err) {
+        console.error('Error adding product', err);
+        alert('Error adding product');
+    }
+});
+</script>
+<script src="script.js"></script>
+</body>
+
+</html>

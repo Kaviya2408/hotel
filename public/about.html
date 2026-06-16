@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>About Us - Delicious Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* About Page Specific Styles */
+        .about-container {
+            height: calc(100vh - 70px - 2rem);
+            display: flex;
+            background: var(--white);
+            overflow: hidden;
+            padding: 1rem 0 0 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+        }
+        .about-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            min-width: 0;
+            background: var(--white);
+            padding-right: 1rem;
+        }
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            min-height: 0;
+            flex: 1;
+        }
+        .about-image:first-child {
+            border-radius: 12px 12px 0 0;
+        }
+        .about-image:last-child {
+            border-radius: 0 0 12px 12px;
+        }
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(109,76,65,0.9), transparent);
+            padding: 1.5rem;
+            color: var(--white);
+        }
+        .image-overlay h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+        .image-overlay p {
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+        .about-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: var(--white);
+            overflow-y: auto;
+            min-width: 0;
+        }
+        .about-content {
+            max-width: 500px;
+            width: 100%;
+        }
+        .about-logo {
+            margin-bottom: 1rem;
+        }
+        .about-logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            filter: sepia(100%) saturate(300%) hue-rotate(330deg) brightness(0.8);
+        }
+        .about-content h1 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.3rem;
+        }
+        .about-content .tagline {
+            font-size: 1rem;
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .about-content p {
+            font-size: 0.95rem;
+            color: var(--gray-color);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .about-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-color);
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .info-text h3 {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin-bottom: 0.2rem;
+            font-weight: 700;
+        }
+        .info-text p {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+            margin: 0;
+            line-height: 1.4;
+        }
+        .back-home {
+            margin-top: 1.5rem;
+        }
+        .back-home a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .back-home a:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        @media (max-width: 968px) {
+            .about-container {
+                flex-direction: column;
+                height: auto;
+                min-height: calc(100vh - 70px);
+            }
+            .about-left {
+                height: 40vh;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr;
+            }
+            .about-right {
+                padding: 2rem;
+                overflow-y: visible;
+            }
+            .about-content h1 {
+                font-size: 2rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .about-left {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            .about-right {
+                padding: 1.5rem;
+            }
+            .about-content h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="logo.png" alt="Restaurant Logo">
+                    <span>Delicious</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about.html" class="active">About</a></li>
+                    <li><a href="reviews.html">Reviews</a></li>
+                    <li><a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div id="authButtons">
+                        <div class="user-menu">
+                            <button class="user-btn" id="userMenuBtn">
+                                <i class="fas fa-user-circle"></i>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                                <a href="admin.html"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+                                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="menu-toggle" id="menuToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Content -->
+    <div class="about-container">
+        <div class="about-left">
+            <div class="about-image">
+                <img src="pexels-enginakyurt-2673353.jpg" alt="Our Food">
+                <div class="image-overlay">
+                    <h3>Fresh Ingredients</h3>
+                    <p>Quality you can taste in every bite</p>
+                </div>
+            </div>
+            <div class="about-image">
+                <img src="pexels-cottonbro-4253312.jpg" alt="Our Kitchen">
+                <div class="image-overlay">
+                    <h3>Expert Chefs</h3>
+                    <p>Crafting culinary excellence daily</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-right">
+            <div class="about-content">
+                <div class="about-logo">
+                    <img src="logo.png" alt="Delicious Restaurant">
+                </div>
+                <h1>Delicious Restaurant</h1>
+                <p class="tagline">Where Flavor Meets Tradition</p>
+                <p>Welcome to Delicious, your destination for authentic and exceptional cuisine. We pride ourselves on serving fresh, flavorful dishes prepared with passion and care.</p>
+                <p>Our restaurant combines traditional recipes with modern culinary techniques to create memorable dining experiences for every guest.</p>
+                
+                <div class="about-info">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-text">
+                            <h3>Location</h3>
+                            <p>123 Food Street, Coimbatore, India</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-text">
+                            <h3>Hours</h3>
+                            <p>Mon - Sun: 11:00 AM - 11:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="info-text">
+                            <h3>Contact</h3>
+                            <p>+1 234 567 8900 | info@delicious.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="back-home">
+                    <a href="index.html">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

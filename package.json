@@ -1,0 +1,29 @@
+{
+  "name": "restaurant",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node backend.js",
+    "dev": "node api/index.js",
+    "build": "echo 'Build complete'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kaviya2408/hotel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kaviya2408/hotel/issues"
+  },
+  "homepage": "https://github.com/Kaviya2408/hotel#readme",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "multer": "^1.4.4",
+    "multer-gridfs-storage": "^5.0.2"
+  }
+}

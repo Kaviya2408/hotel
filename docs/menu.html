@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Menu - Delicious Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Menu Page Specific Styles */
+        .menu-container {
+            min-height: calc(100vh - 80px);
+            padding: 100px 15px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .menu-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+        }
+        
+        .menu-title {
+            font-size: 2rem;
+            color: #6f4e37;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #6f4e37;
+            color: white;
+            border-color: #6f4e37;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .menu-item-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #6f4e37;
+            white-space: nowrap;
+        }
+        
+        .menu-item-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .menu-item-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 0.25rem;
+        }
+        
+        .quantity-btn {
+            background: #6f4e37;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-btn:hover {
+            background: #8b5a3c;
+        }
+        
+        .quantity {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .add-to-cart-btn {
+            background: #6f4e37;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: #8b5a3c;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer Mobile */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #6f4e37;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-col a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-col a:hover {
+            color: #6f4e37;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+        }
+        
+        /* Tablet and Desktop */
+        @media (min-width: 768px) {
+            .nav-menu {
+                display: flex;
+                gap: 2rem;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .menu-container {
+                padding: 120px 2rem 4rem;
+            }
+            
+            .menu-header {
+                text-align: left;
+            }
+            
+            .menu-title {
+                font-size: 2.5rem;
+            }
+            
+            .menu-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .category-filters {
+                justify-content: flex-start;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .menu-item-content {
+                padding: 2rem;
+            }
+            
+            .menu-item-name {
+                font-size: 1.4rem;
+            }
+            
+            .menu-item-price {
+                font-size: 1.4rem;
+            }
+            
+            .menu-item-description {
+                font-size: 1rem;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Prevent zoom on input focus (iOS) */
+        @supports (-webkit-touch-callout: none) {
+            input, textarea, select {
+                font-size: 16px;
+            }
+        }
+        
+        /* Floating Filter Panel */
+        .categories-toggle {
+            background: #6f4e37;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .categories-toggle:hover {
+            background: #8b5a3c;
+            transform: translateY(-2px);
+        }
+        
+        .filter-panel {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .filter-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .filter-panel-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .filter-panel-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-radius: 8px;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .filter-panel-item:hover,
+        .filter-panel-item.active {
+            background: #6f4e37;
+            color: white;
+        }
+        
+        .filter-panel-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Menu Content */
+        .menu-content {
+            padding: 2rem 0;
+        }
+        
+        .menu-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #6f4e37;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #6f4e37;
+        }
+        
+        .menu-items {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        .menu-item-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .item-image {
+            height: 180px;
+            overflow: hidden;
+        }
+        
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .item-details {
+            padding: 1.5rem;
+        }
+        
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .item-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #6f4e37;
+        }
+        
+        .add-item-btn {
+            background: #6f4e37;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+        
+        .add-item-btn:hover {
+            background: #8b5a3c;
+        }
+        
+        .item-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Tablet Responsive */
+        @media (min-width: 768px) {
+            .menu-items {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* Desktop Responsive */
+        @media (min-width: 1024px) {
+            .menu-items {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="logo.png" alt="Restaurant Logo">
+                    <span>Delicious</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html" class="active">Menu</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="reviews.html">Reviews</a></li>
+                    <li><a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div id="authButtons">
+                        <div class="user-menu">
+                            <button class="user-btn" id="userMenuBtn">
+                                <i class="fas fa-user-circle"></i>
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                                <a href="admin.html"><i class="fas fa-shield-alt"></i> Admin Panel</a>
+                                <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="menu-toggle" id="menuToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Container -->
+    <div class="menu-container" id="menuContainer">
+        <!-- Menu Header -->
+        <div class="menu-header">
+            <div style="position: relative; display: inline-block;">
+                <button class="categories-toggle" id="categoriesToggle">
+                    <i class="fas fa-filter"></i> Filter Categories
+                </button>
+                <div class="filter-panel" id="filterPanel">
+                    <ul class="filter-panel-list">
+                        <li class="filter-panel-item active" data-category="all">All Items</li>
+                        <li class="filter-panel-item" data-category="curry">Curries</li>
+                        <li class="filter-panel-item" data-category="rice">Rice & Biryani</li>
+                        <li class="filter-panel-item" data-category="tandoori">Tandoori</li>
+                        <li class="filter-panel-item" data-category="noodles">Noodles</li>
+                    </ul>
+                </div>
+            </div>
+            <h1 class="menu-title">Our Menu</h1>
+        </div>
+
+        <!-- Menu Content -->
+        <main class="menu-content">
+            <!-- Curries Section -->
+            <section class="menu-section" data-section="curry">
+                <h2 class="section-title"><i class="fas fa-fire"></i> Signature Curries</h2>
+                <div class="menu-items">
+                    <div class="menu-item-card">
+                        <div class="item-image">
+                            <img src="pexels-enginakyurt-2673353.jpg" alt="Chicken Curry">
+                            <div class="item-badge">Popular</div>
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Chicken Curry</h3>
+                            <p class="item-description">Tender chicken pieces simmered in aromatic curry sauce with fresh spices and herbs</p>
+                            <div class="item-footer">
+                                <span class="item-price">$18.99</span>
+                                <button class="add-to-cart-btn" onclick="addToCart('Chicken Curry', 18.99)">
+                                    <i class="fas fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item-card">
+                        <div class="item-image">
+                            <img src="pexels-ramazphotos-31651635.jpg" alt="Mutton Curry">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Mutton Curry</h3>
+                            <p class="item-description">Premium mutton slow-cooked with traditional spices and rich gravy</p>
+                            <div class="item-footer">
+                                <span class="item-price">$22.99</span>
+                                <button class="add-to-cart-btn" onclick="addToCart('Mutton Curry', 22.99)">
+                                    <i class="fas fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rice Section -->
+            <section class="menu-section" data-section="rice">
+                <h2 class="section-title"><i class="fas fa-seedling"></i> Rice & Biryani</h2>
+                <div class="menu-items">
+                    <div class="menu-item-card">
+                        <div class="item-image">
+                            <img src="pexels-cottonbro-4253312.jpg" alt="Biryani">
+                            <div class="item-badge">Chef's Special</div>
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Biryani Special</h3>
+                            <p class="item-description">Aromatic basmati rice layered with spiced meat and saffron</p>
+                            <div class="item-footer">
+                                <span class="item-price">$16.99</span>
+                                <button class="add-to-cart-btn" onclick="addToCart('Biryani Special', 16.99)">
+                                    <i class="fas fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tandoori Section -->
+            <section class="menu-section" data-section="tandoori">
+                <h2 class="section-title"><i class="fas fa-drumstick-bite"></i> Tandoori Specials</h2>
+                <div class="menu-items">
+                    <div class="menu-item-card">
+                        <div class="item-image">
+                            <img src="pexels-kampus-6605421.jpg" alt="Paneer Tikka">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Paneer Tikka</h3>
+                            <p class="item-description">Grilled cottage cheese marinated with exotic spices and yogurt</p>
+                            <div class="item-footer">
+                                <span class="item-price">$14.99</span>
+                                <button class="add-to-cart-btn" onclick="addToCart('Paneer Tikka', 14.99)">
+                                    <i class="fas fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item-card">
+                        <div class="item-image">
+                            <img src="pexels-shootsaga-30660319.jpg" alt="Tandoori Platter">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Tandoori Platter</h3>
+                            <p class="item-description">Assorted tandoori delights including chicken, paneer, and kebabs</p>
+                            <div class="item-footer">
+                                <span class="item-price">$24.99</span>
+                                <button class="add-to-cart-btn" onclick="addToCart('Tandoori Platter', 24.99)">
+                                    <i class="fas fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Noodles Section -->
+            <section class="menu-section" data-section="noodles">
+                <h2 class="section-title"><i class="fas fa-bowl-food"></i> Asian Noodles</h2>
+                <div class="menu-items">
+                    <div class="menu-item-card">
+                        <div class="item-image">
+                            <img src="pexels-nadin-sh-78971847-19252760.jpg" alt="Spicy Noodles">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-name">Spicy Noodles</h3>
+                            <p class="item-description">Authentic Asian noodles tossed with fresh vegetables and bold spices</p>
+                            <div class="item-footer">
+                                <span class="item-price">$12.99</span>
+                                <button class="add-to-cart-btn" onclick="addToCart('Spicy Noodles', 12.99)">
+                                    <i class="fas fa-cart-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Floating Filter Panel
+        const categoriesToggle = document.getElementById('categoriesToggle');
+        const filterPanel = document.getElementById('filterPanel');
+        
+        // Toggle filter panel
+        categoriesToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            filterPanel.classList.toggle('active');
+        });
+        
+        // Close filter panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!categoriesToggle.contains(e.target) && !filterPanel.contains(e.target)) {
+                filterPanel.classList.remove('active');
+            }
+        });
+        
+        // Category filtering
+        const filterPanelItems = document.querySelectorAll('.filter-panel-item');
+        const menuSections = document.querySelectorAll('.menu-section');
+
+        filterPanelItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const category = item.dataset.category;
+                
+                // Update active state
+                filterPanelItems.forEach(panelItem => panelItem.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Close filter panel after selection
+                filterPanel.classList.remove('active');
+                
+                // Filter sections
+                if (category === 'all') {
+                    menuSections.forEach(section => section.style.display = 'block');
+                } else {
+                    menuSections.forEach(section => {
+                        if (section.dataset.section === category) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+
+        function addToCart(name, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.name === name);
+            
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            event.target.innerHTML = '<i class="fas fa-check"></i> Added!';
+            event.target.style.background = 'linear-gradient(135deg, #7cb342, #8bc34a)';
+            setTimeout(() => {
+                event.target.innerHTML = '<i class="fas fa-cart-plus"></i> Add';
+                event.target.style.background = '';
+            }, 1500);
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) {
+                const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                cartCount.textContent = totalItems;
+            }
+        }
+
+        updateCartCount();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

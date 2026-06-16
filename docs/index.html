@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Delicious - Fine Dining Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Home Page Specific Styles */
+        .hero {
+            background: linear-gradient(135deg, #6f4e37, #8b5a3c);
+            padding: 120px 0 60px 0;
+            text-align: center;
+            color: white;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .hero-content h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .hero-content p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-buttons .btn-primary,
+        .hero-buttons .btn-secondary {
+            width: 200px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: #6f4e37;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 1rem 2rem;
+            border: 2px solid white;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #6f4e37;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* Features Section Mobile */
+        .features {
+            padding: 4rem 0;
+            background: #f8f9fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #6f4e37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Menu Preview Mobile */
+        .menu-preview {
+            padding: 4rem 0;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .menu-item-content {
+            padding: 1.5rem;
+        }
+        
+        .menu-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .menu-item p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .menu-item-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #6f4e37;
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #6f4e37, #8b5a3c);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .cta-buttons .btn-primary {
+            min-width: 200px;
+        }
+        
+        /* Footer Mobile */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #6f4e37;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-col a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-col a:hover {
+            color: #6f4e37;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+        }
+        
+        /* Tablet and Desktop */
+        @media (min-width: 768px) {
+            .nav-menu {
+                display: flex;
+                gap: 2rem;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: row;
+                gap: 1.5rem;
+            }
+            
+            .hero-buttons .btn-primary,
+            .hero-buttons .btn-secondary {
+                width: auto;
+                min-width: 180px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        /* Prevent zoom on input focus (iOS) */
+        @supports (-webkit-touch-callout: none) {
+            input, textarea, select {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader">
+            <div class="food-plate">
+                <div class="food-items">
+                    <span class="food-item">🍛</span>
+                    <span class="food-item">🥘</span>
+                    <span class="food-item">🌯</span>
+                    <span class="food-item">🍜</span>
+                    <span class="food-item">🥙</span>
+                    <span class="food-item">🍲</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <img src="logo.png" alt="Restaurant Logo">
+                    <span>Delicious</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="reviews.html">Reviews</a></li>
+                    <li><a href="cart.html" class="cart-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a></li>
+                </ul>
+                <div class="nav-actions">
+                    <div id="authButtons">
+                        <a href="login.html" class="btn-outline">Login</a>
+                    </div>
+                    <button class="menu-toggle" id="menuToggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Experience Culinary Excellence</h1>
+                <p class="hero-subtitle">Authentic flavors crafted with passion and served with love</p>
+                <div class="hero-buttons">
+                    <a href="menu.html" class="btn-primary">Explore Menu</a>
+                    <button class="btn-secondary" id="bookTableBtn">Book a Table</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Fresh Ingredients</h3>
+                    <p>Locally sourced, organic ingredients prepared daily</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3>Award Winning</h3>
+                    <p>Recognized for excellence in culinary arts</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick and reliable delivery to your doorstep</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Made with Love</h3>
+                    <p>Every dish crafted with care and passion</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Dishes -->
+    <section class="popular-dishes">
+        <div class="container">
+            <div class="section-header">
+                <h2>Popular Dishes</h2>
+                <p>Discover our most loved creations</p>
+            </div>
+            <div class="dishes-grid">
+                <div class="dish-card">
+                    <div class="dish-image">
+                        <img src="pexels-enginakyurt-2673353.jpg" alt="Dish">
+                        <div class="dish-badge">Chef's Special</div>
+                    </div>
+                    <div class="dish-content">
+                        <h3>Butter Chicken</h3>
+                        <p>Tender chicken in rich tomato cream sauce</p>
+                        <div class="dish-footer">
+                            <span class="price">$18.99</span>
+                            <button class="btn-add-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-image">
+                        <img src="pexels-cottonbro-4253312.jpg" alt="Dish">
+                    </div>
+                    <div class="dish-content">
+                        <h3>Biryani Special</h3>
+                        <p>Aromatic basmati rice with spiced meat</p>
+                        <div class="dish-footer">
+                            <span class="price">$16.99</span>
+                            <button class="btn-add-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dish-card">
+                    <div class="dish-image">
+                        <img src="pexels-kampus-6605421.jpg" alt="Dish">
+                        <div class="dish-badge">Popular</div>
+                    </div>
+                    <div class="dish-content">
+                        <h3>Paneer Tikka</h3>
+                        <p>Grilled cottage cheese with exotic spices</p>
+                        <div class="dish-footer">
+                            <span class="price">$14.99</span>
+                            <button class="btn-add-cart">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="section-cta">
+                <a href="menu.html" class="btn-primary">View Full Menu</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="reservation">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Experience Amazing Food?</h2>
+                <p>Order online for delivery</p>
+                <div class="cta-buttons">
+                    <a href="menu.html" class="btn-primary">Order Online</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Table Booking Modal -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-header">
+                <i class="fas fa-calendar-check"></i>
+                <h2>Reserve Your Table</h2>
+                <p>Book your dining experience with us</p>
+            </div>
+            <form id="bookingForm" class="booking-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingName"><i class="fas fa-user"></i> Full Name</label>
+                        <input type="text" id="bookingName" name="name" required placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingPhone"><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="bookingPhone" name="phone" required placeholder="Enter your phone number">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingGuests"><i class="fas fa-users"></i> Number of Guests</label>
+                        <select id="bookingGuests" name="guests" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Person</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5">5 People</option>
+                            <option value="6">6 People</option>
+                            <option value="7">7 People</option>
+                            <option value="8">8 People</option>
+                            <option value="9+">9+ People</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingDate"><i class="fas fa-calendar"></i> Date</label>
+                        <input type="date" id="bookingDate" name="date" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bookingTime"><i class="fas fa-clock"></i> Time</label>
+                        <select id="bookingTime" name="time" required>
+                            <option value="">Select time</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="11:30 AM">11:30 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="12:30 PM">12:30 PM</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="1:30 PM">1:30 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                            <option value="2:30 PM">2:30 PM</option>
+                            <option value="6:00 PM">6:00 PM</option>
+                            <option value="6:30 PM">6:30 PM</option>
+                            <option value="7:00 PM">7:00 PM</option>
+                            <option value="7:30 PM">7:30 PM</option>
+                            <option value="8:00 PM">8:00 PM</option>
+                            <option value="8:30 PM">8:30 PM</option>
+                            <option value="9:00 PM">9:00 PM</option>
+                            <option value="9:30 PM">9:30 PM</option>
+                            <option value="10:00 PM">10:00 PM</option>
+                            <option value="10:30 PM">10:30 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bookingEmail"><i class="fas fa-envelope"></i> Email (Optional)</label>
+                        <input type="email" id="bookingEmail" name="email" placeholder="Enter your email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="bookingNotes"><i class="fas fa-comment"></i> Special Requests (Optional)</label>
+                    <textarea id="bookingNotes" name="notes" rows="3" placeholder="Any special requests or dietary requirements?"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-check-circle"></i> Confirm Reservation
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <img src="logo.png" alt="Restaurant Logo">
+                        <span>Delicious</span>
+                    </div>
+                    <p>Experience the finest dining with authentic flavors and exceptional service.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="login.html">My Account</a></li>
+                        <li><a href="cart.html">Cart</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Food Street, City</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> info@delicious.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sun: 11AM - 11PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Delicious Restaurant. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
