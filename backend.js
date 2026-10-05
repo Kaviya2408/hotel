@@ -31,6 +31,7 @@ const productSchema = new mongoose.Schema({
     category: { type: String, required: true },
     popular: { type: Boolean, default: false },
     special: { type: Boolean, default: false },
+    offer: { type: Boolean, default: false },
     vegetarian: { type: Boolean, default: false },
     vegan: { type: Boolean, default: false },
     glutenFree: { type: Boolean, default: false },
@@ -232,9 +233,13 @@ app.post('/api/categories', async (req, res) => {
 
 /* Product creation with image handling */
 app.post('/api/products', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'bannerImage', maxCount: 1 }]), async (req, res) => {
+    // Admin-only: creating menu items is an admin action
+    if (req.headers['x-user-role'] !== 'admin') {
+        return res.status(403).json({ error: 'Forbidden' });
+    }
 
     try {
-        const { name, description, price, imageUrl, bannerUrl, category, popular, special, vegetarian, vegan, glutenFree, chefSpecial, spicyLevel, servingSize } = req.body;
+        const { name, description, price, imageUrl, bannerUrl, category, popular, special, offer, vegetarian, vegan, glutenFree, chefSpecial, spicyLevel, servingSize } = req.body;
         if (!name || price === undefined || !category) {
             return res.status(400).json({ error: 'Missing required fields (name, price, category)' });
         }
@@ -244,15 +249,16 @@ app.post('/api/products', upload.fields([{ name: 'image', maxCount: 1 }, { name:
         const imageId = imageFile ? imageFile.id : null;
         const finalImageUrl = imageFile ? null : imageUrl; // if file uploaded, ignore URL
         const finalBannerUrl = bannerFile ? bannerFile.id.toString() : (bannerUrl || null);
-        
+
         // Convert boolean strings to actual booleans
         const isPopular = popular === 'true' || popular === true;
         const isSpecial = special === 'true' || special === true;
+        const isOffer = offer === 'true' || offer === true;
         const isVegetarian = vegetarian === 'true' || vegetarian === true;
         const isVegan = vegan === 'true' || vegan === true;
         const isGlutenFree = glutenFree === 'true' || glutenFree === true;
         const isChefSpecial = chefSpecial === 'true' || chefSpecial === true;
-        
+
         const product = new Product({
             name,
             description,
@@ -263,6 +269,7 @@ app.post('/api/products', upload.fields([{ name: 'image', maxCount: 1 }, { name:
             bannerUrl: finalBannerUrl,
             popular: isPopular,
             special: isSpecial,
+            offer: isOffer,
             vegetarian: isVegetarian,
             vegan: isVegan,
             glutenFree: isGlutenFree,
@@ -338,19 +345,20 @@ app.put('/api/products/:id', upload.fields([{ name: 'image', maxCount: 1 }, { na
   }
   
   try {
-    const { name, description, price, imageUrl, bannerUrl, category, popular, special } = req.body;
-    
+    const { name, description, price, imageUrl, bannerUrl, category, popular, special, offer } = req.body;
+
     // Handle image uploads
     const imageFile = req.files && req.files['image'] ? req.files['image'][0] : null;
     const bannerFile = req.files && req.files['bannerImage'] ? req.files['bannerImage'][0] : null;
-    
+
     const updateData = {
       name,
       description,
       price: parseFloat(price),
       category,
       popular: popular === 'true' || popular === true,
-      special: special === 'true' || special === true
+      special: special === 'true' || special === true,
+      offer: offer === 'true' || offer === true
     };
     
     if (imageFile) {

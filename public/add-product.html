@@ -689,6 +689,12 @@
                             </div>
                             <div class="checkbox-group">
                                 <label class="checkbox-label">
+                                    <input type="checkbox" id="offer" name="offer">
+                                    <i class="fas fa-percent"></i> Offer
+                                </label>
+                            </div>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
                                     <input type="checkbox" id="vegetarian" name="vegetarian">
                                     <i class="fas fa-leaf"></i> Vegetarian
                                 </label>
@@ -918,6 +924,7 @@
                 formData.append('price', form.productPrice.value);
                 formData.append('popular', form.popular.checked);
                 formData.append('special', form.special.checked);
+                formData.append('offer', form.offer.checked);
                 formData.append('vegetarian', form.vegetarian.checked);
                 formData.append('vegan', form.vegan.checked);
                 formData.append('glutenFree', form.glutenFree.checked);
@@ -967,9 +974,10 @@
                     formData.append('imageUrl', form.imageUrl.value.trim());
                 }
 
-                const resp = await fetch(`${backendUrl}/api/products`, { 
-                    method: 'POST', 
-                    body: formData 
+                const resp = await fetch(`${backendUrl}/api/products`, {
+                    method: 'POST',
+                    headers: { 'x-user-role': localStorage.getItem('userRole') || '' },
+                    body: formData
                 });
                 
                 if (resp.ok) {
@@ -1064,6 +1072,7 @@
             let badges = '';
             if (product.popular) badges += '<span class="badge badge-popular"><i class="fas fa-fire"></i> Popular</span>';
             if (product.special) badges += '<span class="badge badge-special"><i class="fas fa-crown"></i> Special</span>';
+            if (product.offer) badges += '<span class="badge" style="background:rgba(233,30,99,0.1);color:#e91e63;border:1px solid #e91e63;"><i class="fas fa-percent"></i> Offer</span>';
             if (product.vegetarian) badges += '<span class="badge" style="background:rgba(76,175,80,0.1);color:#4caf50;border:1px solid #4caf50;"><i class="fas fa-leaf"></i> Veg</span>';
             if (product.vegan) badges += '<span class="badge" style="background:rgba(76,175,80,0.1);color:#4caf50;border:1px solid #4caf50;"><i class="fas fa-seedling"></i> Vegan</span>';
             if (product.glutenFree) badges += '<span class="badge" style="background:rgba(33,150,243,0.1);color:#2196f3;border:1px solid #2196f3;"><i class="fas fa-wheat"></i> GF</span>';
