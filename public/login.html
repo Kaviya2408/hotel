@@ -378,20 +378,26 @@
 		// Initialize Firebase when page loads
 		loadFirebaseConfig();
 
+		const ADMIN_EMAIL = 'kit27.csbs29@gmail.com';
+
 		function handleLogin(event) {
 			event.preventDefault();
-			
+
 			const email = document.getElementById('email').value;
 			const password = document.getElementById('password').value;
-			
+
 			try {
+				const role = email.trim().toLowerCase() === ADMIN_EMAIL ? 'admin' : 'user';
+
 				localStorage.setItem('userEmail', email);
+				localStorage.setItem('userRole', role);
 				localStorage.setItem('isLoggedIn', 'true');
 				localStorage.setItem('currentUser', JSON.stringify({
 					name: email.split('@')[0],
-					email: email
+					email: email,
+					role: role
 				}));
-				
+
 				showMessage('Login successful! Redirecting...', 'success');
 				
 				setTimeout(() => {
